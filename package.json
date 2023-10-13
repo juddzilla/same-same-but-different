@@ -1,0 +1,11 @@
+{
+  "name": "same-same-but-different",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Judd Hendrix",
+  "license": "GPL",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
