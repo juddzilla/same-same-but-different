@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "node-pg-migrate": "^6.2.2",
+    "pg": "^8.11.3",
+    "pg-camelcase": "^0.0.3"
+  },
+  "license": "GPL",
+  "name": "pg-dao",
+  "scripts": {
+    "migrate": "node-pg-migrate",
+    "migrate:up": "node-pg-migrate --envPath ../../.env up"
+  },
+  "version": "1.0.0"
+}
