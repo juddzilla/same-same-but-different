@@ -1,0 +1,10 @@
+{
+  "license": "GPL",
+  "main": "index.js",
+  "name": "utils-lib",
+  "version": "1.0.0",
+  "dependencies": {
+    "glob": "^10.3.10"
+  },
+  "type": "module"
+}

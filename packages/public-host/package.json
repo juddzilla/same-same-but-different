@@ -1,5 +1,22 @@
 {
-  "license": "GPL",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^9.1.0",
+    "@fastify/cors": "^8.4.0",
+    "@fastify/helmet": "^11.1.1",
+    "fastify": "^4.24.1",
+    "utils-lib": "1.0.0"
+  },
+  "license": "UNLICENSED",
+  "main": "index.js",
   "name": "public-host",
-  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "yarn run run:server",
+    "run:server": "dotenv -e ../../.dev.env -- node --experimental-modules --experimental-specifier-resolution=node index.js"
+  },
+  "type": "module",
+  "version": "1.0.0"
 }
