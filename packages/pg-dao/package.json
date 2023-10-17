@@ -8,7 +8,7 @@
   "name": "pg-dao",
   "scripts": {
     "migrate": "node-pg-migrate",
-    "migrate:up": "node-pg-migrate --envPath ../../.env up"
+    "migrate:up": "node-pg-migrate --envPath ../../.dev.env up"
   },
   "version": "1.0.0"
 }
