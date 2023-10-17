@@ -1,0 +1,10 @@
+{
+  "GamesJoin": {
+    "method": "GET",
+    "path": "/games"
+  },
+  "AuthCheck": {
+    "method": "GET",
+    "path": "/whothatis"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "utils-lib": "1.0.0"
+  },
+  "license": "UNLICENSED",
+  "main": "index.js",
+  "name": "public-host-api-lib",
+  "private": true,
+  "scripts": {
+    "build": "yarn run build:copy",
+    "build:copy": "node src/copy.js",
+    "dev": "yarn run build:copy && yarn run watch:paths",
+    "watch:paths": "nodemon --exec \"yarn run build:copy\" --config .nodemonrc.json"
+  },
+  "type": "module",
+  "version": "1.0.0"
+}

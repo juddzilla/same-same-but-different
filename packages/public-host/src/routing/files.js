@@ -1,7 +1,7 @@
 import path from 'path';
-import Utils from '../interfaces/utils-lib';
+import Utils from '../interfaces/utils.js';
 
-const paths = path.join(process.cwd(), 'src', 'routes', '*', '*.js');
+export const paths = path.join(process.cwd(), 'src', 'routes', '*', '*.js');
 
 export default async () => {
   const filepaths = await Utils.FindFilesInDir(paths);

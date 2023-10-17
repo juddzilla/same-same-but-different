@@ -1,0 +1,57 @@
+.play-board {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+#play-view {
+    padding-bottom: 64px;
+}
+
+.play-footer {
+    height: 80px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255,255,255,0.9);
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    color: var(--off-black);
+}
+
+.play-footer .play-footer-content {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    max-width: 1170px;
+}
+
+.play-footer .stat-cats {
+    font-size: 14px;
+}
+
+.play-footer .stat-line {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.play-footer .score-board {
+    /*width: 230px;*/
+}
+
+.play-footer .time {
+    font-size: 24px;
+    /*width: 230px;*/
+}
+
+.play-footer .actions {
+    /*flex: 1;*/
+}
+
+.actions button {
+    background-color: #8AD19F;
+}

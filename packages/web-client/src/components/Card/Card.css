@@ -1,0 +1,86 @@
+.border {
+    border: 11px solid white;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.color-one {
+    --color: #009698
+}
+
+.color-two {
+    --color: #F7CE9C
+}
+
+.color-three {
+    --color: #E86D6D
+}
+
+.fill-one {
+    /*dots*/
+    background-image:
+            radial-gradient(white 10%, transparent 19.2%),
+            radial-gradient(white 10%, transparent 19.2%);
+    background-position: 0px 0px, 12px 12px;
+    background-size: 24px 24px;
+    background-color: var(--color);
+}
+
+.fill-two {
+    /*solid*/
+    background-color: var(--color);
+}
+
+.fill-three {
+    /*stripes*/
+    background-image: repeating-linear-gradient(135deg, var(--color), var(--color) 8px, white 6px, white 14px);
+}
+
+.play-card {
+    border: 3px solid var(--off-black);
+    width: 230px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin:0 2px 4px 2px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.play-card .shapes {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.play-card.selected {
+    border-width: 13px;
+    transition: border-width 90ms ease-in, border-radius 90ms ease-in;
+    border-radius: 0;
+}
+
+.play-card:hover .border, .play-card.selected .border {
+    border-width: 0;
+    transition: border-width 90ms ease-in;
+}
+
+.play-card:hover svg path {
+    stroke-width: 1.5;
+}
+
+.play-card.selected svg path {
+    stroke-width: 2;
+}
+.shapes svg {
+    transform: scale(1);
+}
+
+.shapes svg path {
+    stroke: var(--off-black);
+    transition: stroke-width 90ms ease-in;
+}
+
+

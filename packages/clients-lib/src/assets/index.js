@@ -1,9 +1,9 @@
-import Bread from './bread-slice.svg';
-import Egg from './egg.svg';
-import Pizza from './pizza-slice.svg';
+import One from './flare.svg';
+import Two from './octagon.svg';
+import Three from './triangle.svg';
 
 export default {
-  ShapeOne: Bread,
-  ShapeTwo: Egg,
-  ShapeThree: Pizza,
+  ShapeOne: One,
+  ShapeTwo: Two,
+  ShapeThree: Three,
 }

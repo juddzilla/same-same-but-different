@@ -1,11 +1,13 @@
 {
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "pino-pretty": "^10.2.3"
   },
   "dependencies": {
     "@fastify/cookie": "^9.1.0",
     "@fastify/cors": "^8.4.0",
     "@fastify/helmet": "^11.1.1",
+    "domain-lib": "1.0.0",
     "fastify": "^4.24.1",
     "utils-lib": "1.0.0"
   },
@@ -14,8 +16,11 @@
   "name": "public-host",
   "private": true,
   "scripts": {
-    "dev": "yarn run run:server",
-    "run:server": "dotenv -e ../../.dev.env -- node --experimental-modules --experimental-specifier-resolution=node index.js"
+    "dev": "yarn run build:public-paths & yarn run run:server & yarn run watch:routes",
+    "build:public-paths": "node --experimental-modules --es-module-specifier-resolution=node ./src/routing/build.js",
+    "run:server": "dotenv -e ../../.dev.env -- nodemon --config .nodemonrc.json --exec node --experimental-modules --experimental-specifier-resolution=node index.js | pino-pretty",
+    "start": "node --experimental-modules --experimental-specifier-resolution=node index.js",
+    "watch:routes": "nodemon --watch src/routes --exec node --experimental-modules --es-module-specifier-resolution=node ./src/routing/watch.js"
   },
   "type": "module",
   "version": "1.0.0"
