@@ -648,7 +648,7 @@ const Component = () => {
 };
 
 const Route = {
-  path: "/play",
+  path: "/play/:id",
   element: <Component />,
 };
 
