@@ -1,26 +1,35 @@
-import Deck from '../deck';
-// create Deck
-// create Game
-// creae
+import DB from '../interfaces/db';
+import { nanoid } from 'nanoid';
 
-const DB = { Game: { Create: () => {} }};
-const { Game } = DB;
-/**
- * Create a game.
- * @param {string} duration - Duration of game in secs.
- * @param {string} hostId - ID of user initiating create.
- */
-export default () => {
-  const gameDeck = Deck.Create();
+import NewDeck from '../deck/create';
+
+const { GameDecks, Games } = DB;
+
+export default async ({ duration, players, userId }) => {
   try {
-    const newGame = Game.Create({
-      deck: gameDeck,
+    const publicHash = nanoid();
+
+    const opts = {
       duration,
-      hostId,
+      players,
+      publicHash,
+      userId,
+    };
+
+    if (players === 1) {
+      opts.playerId = userId;
+    }
+
+    const Game = await Games.Create(opts);
+
+    const deck = NewDeck();
+    await GameDecks.Create({
+      gameId: Game.id,
+      deck: `"${deck}"`,
     });
 
-    return newGame;
+    return { publicHash } ;
   } catch (error) {
-
+    console.log('ERR', error);
   }
 };

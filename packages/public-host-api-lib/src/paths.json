@@ -3,6 +3,14 @@
     "method": "GET",
     "path": "/games"
   },
+  "GamesCreate": {
+    "method": "POST",
+    "path": "/games"
+  },
+  "GameCheck": {
+    "method": "GET",
+    "path": "/game/:id"
+  },
   "AuthCheck": {
     "method": "GET",
     "path": "/whothatis"

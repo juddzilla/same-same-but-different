@@ -6,7 +6,13 @@ export default () => {
   const shapes = [1,2,3];
   const quantity = [1,2,3];
   const cartesian =
-      (...a) => a.reduce((a, b) => a.flatMap(d => b.map(e => [d, e].flat())));
+      (...a) => a.reduce((a, b) =>
+          a.flatMap(d =>
+              b.map(e =>
+                  parseInt([d, e].flat().join(''), 10)
+              )
+          )
+      );
 
   const all = cartesian(colors, fill, quantity, shapes);
 

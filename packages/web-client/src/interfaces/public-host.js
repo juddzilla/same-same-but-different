@@ -1,4 +1,5 @@
 import API from 'public-host-api-lib';
-const PublicHostUrl = document.querySelector('meta[name=api]');
+import ENV from './environment';
+const { APIHost } = ENV;
 
-export default API(PublicHostUrl.content);
+export default API(APIHost);

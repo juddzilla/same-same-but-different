@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "pg": "^8.11.3",
+    "pg-camelcase": "^0.0.3"
+  },
+  "license": "UNLICENSED",
+  "name": "pg-lib",
+  "scripts": {},
+  "type": "module",
+  "version": "1.0.0"
+}

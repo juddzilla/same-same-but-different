@@ -1,22 +1,18 @@
-import React, { useState } from 'react';
-import './App.css';
+import React from 'react';
 import { Link, Outlet } from "react-router-dom";
-// import { Navigate,  } from 'react-router-dom';
 
-import { RouterProvider } from "react-router-dom";
-import Routes from './routes.jsx';
 const links = [
   { display: 'Home', to: '/' },
-  { display: 'Play', to: '/games' },
-  { display: 'Rules', to: '/games' }
+  { display: 'Play', to: '/play' },
+  { display: 'Rules', to: '/rules' }
 ];
 
 export default () => {
   return (
     <>
       <header>
-        { links.map(link => (
-            <Link to={ link.to }>{ link.display }</Link>
+        { links.map((link, index) => (
+            <Link to={ link.to } key={index}>{ link.display }</Link>
         ))}
 
       </header>

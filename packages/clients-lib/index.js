@@ -1,5 +1,5 @@
-import Shapes from './src/assets';
+import Play from './src/play';
 
 export default {
-  Shapes,
+  Play,
 }

@@ -1,5 +1,7 @@
 {
-  "dependencies": {},
+  "dependencies": {
+    "react": "^18.2.0"
+  },
   "devDependencies": {
     "nodemon": "^3.0.1"
   },

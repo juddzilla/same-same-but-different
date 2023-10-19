@@ -1,7 +1,9 @@
 const wrapper = async (cb, req, res) => {
   const { DATA } = req;
+  console.log('cb', cb);
+  console.log('DATA', DATA);
   const values = await cb(DATA);
-
+  console.log('values', values);
   if (values.error) {
     const errorMap = {
       catch: 500,

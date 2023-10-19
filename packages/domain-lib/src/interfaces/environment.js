@@ -1,4 +1,5 @@
 const {
+  DATABASE_URL,
   SERVER_ADDRESS,
   SERVER_PORT,
   SERVER_COOKIE_DOMAIN,
@@ -7,6 +8,7 @@ const {
 } = process.env;
 
 export default {
+  databaseUrl: DATABASE_URL,
   serverAddress: SERVER_ADDRESS,
   serverPort: SERVER_PORT,
   serverCookieDomain: SERVER_COOKIE_DOMAIN,

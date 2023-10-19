@@ -1,5 +1,14 @@
 {
-  "license": "GPL",
+  "license": "UNLICENSED",
   "name": "play-host",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "domain-lib": "1.0.0",
+    "ws": "^8.14.2"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "yarn run run:server",
+    "run:server": "dotenv -e ../../.dev.env -- nodemon --config .nodemonrc.json --exec node --experimental-modules --experimental-specifier-resolution=node index.js"
+  }
 }

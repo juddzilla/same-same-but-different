@@ -2,5 +2,9 @@
   "license": "GPL",
   "name": "domain-lib",
   "version": "1.0.0",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "nanoid": "^5.0.2",
+    "pg-lib": "1.0.0"
+  }
 }

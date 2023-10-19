@@ -22,33 +22,45 @@ exports.shorthands = {
 };
 
 const tables = {
-  users: {
+  game_attempts: {
     schema: {
       id: 'primaryId',
       created_at: 'createdAt',
-      name: 'name',
-      email: 'text',
+      game_id: 'idRef',
+      user_id: 'idRef',
+      attempt: {
+        notNull: true,
+        type: 'json',
+      },
+      correct: {
+        notNull: true,
+        type: 'boolean',
+      }
     },
-    constraints: [
-      { unique_user_email: 'unique (email)' },
-    ],
   },
-  sessions: {
-    schema: {
-      id: 'primaryId',
-      created_at: 'createdAt',
-      token: { notNull: true, type: 'text' },
-    },
-    constraints: [
-      { uniq_session_token: 'unique (token)' },
-    ],
-  },
-  user_sessions: {
+  games: {
     schema: {
       id: 'primaryId',
       created_at: 'createdAt',
       user_id: 'idRef',
-      session_id: 'idRef',
+      duration: {
+        type: 'integer',
+        notNull: true,
+      },
+      players: {
+        type: 'integer',
+        notNull: true,
+        default: 1,
+      },
+      player_id: { type: 'integer' },
+      public_hash: { notNull: true, type: 'text' },
+      started_at: { type: 'timestamptz' },
+      completed_at: { type: 'timestamptz' },
+      difficulty: {
+        type: 'integer',
+        notNull: true,
+        default: 1,
+      }
     },
   },
   oauth_providers: {
@@ -73,49 +85,34 @@ const tables = {
       { uniq_oauth_user: 'unique (user_id, provider_id)' },
     ],
   },
-  user_games: {
+  sessions: {
     schema: {
       id: 'primaryId',
       created_at: 'createdAt',
-      creator_id: 'idRef',
-      guest_id: 'idRef',
-      game_id: 'idRef',
+      token: { notNull: true, type: 'text' },
     },
     constraints: [
-      { uniq_game_id: 'unique (game_id)' },
+      { uniq_session_token: 'unique (token)' },
     ],
   },
-  game: {
+  user_sessions: {
     schema: {
       id: 'primaryId',
       created_at: 'createdAt',
-      duration: {
-        type: 'integer',
-        notNull: true,
-      },
-      started_at: { type: 'timestamptz' },
-      completed_at: { type: 'timestamptz' },
-      difficulty: {
-        type: 'integer',
-        notNull: true,
-        default: 1,
-      }
+      user_id: 'idRef',
+      session_id: 'idRef',
     },
   },
-  game_attempts: {
+  users: {
     schema: {
       id: 'primaryId',
       created_at: 'createdAt',
-      game_id: 'idRef',
-      attempt: {
-        notNull: true,
-        type: 'json',
-      },
-      correct: {
-        notNull: true,
-        type: 'boolean',
-      }
+      name: 'name',
+      email: 'text',
     },
+    constraints: [
+      { unique_user_email: 'unique (email)' },
+    ],
   },
 };
 
