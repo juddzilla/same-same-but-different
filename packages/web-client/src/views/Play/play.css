@@ -118,4 +118,6 @@ body.wrong .play-card .border {
         }
     }
 
+    &.completed .circle { display: none }
+
 }

@@ -53,8 +53,13 @@ const Component = () => {
 
   // game timer
   const [isActive, setIsActive] = useState(false);
-  // const [seconds, setSeconds] = useState(data.game.duration);
-  const [seconds, setSeconds] = useState(10);
+  const [seconds, setSeconds] = useState(data.game.duration);
+  // const [seconds, setSeconds] = useState(10);
+
+  // game score
+  const initialAttempts = [[], null];
+  if (data.game.players === 2) { initialAttempts[1] = []; }
+  const [attempts, setAttempts] = useState(initialAttempts);
 
   const completed = () => {
     webSocket.current.send(JSON.stringify({
@@ -96,10 +101,14 @@ const Component = () => {
 
     webSocket.current.onmessage = ({ data }) => {
       const event = JSON.parse(data);
-      // console.log('event', event);
+      console.log('event', event);
 
       if (event.type === 'attempt') {
         const requester = equalsCheck(event.selected, selected);
+        const position = requester ? 0 : 1;
+        attempts[position].push(event);
+        setAttempts(attempts);
+        console.log('attempts', attempts);
 
         if (event.correct) {
           const updated = cards.filter(card => {
@@ -182,9 +191,25 @@ const Component = () => {
   };
 
   const displayMap = {
+    completed: 'Doing final calculations',
     countdown: 'Get Ready',
     loading: 'Loading',
     waiting: 'Waiting for Player 2'
+  };
+
+  const calcScore = (atts) => {
+    return atts.reduce((acc, cur) => {
+      const val = cur.correct ? 10 : -5;
+      acc += val;
+      return acc;
+    }, 0);
+  };
+
+  const countAttempts = (atts, value) => {
+    if (!value) {
+      return atts.length;
+    }
+    return atts.filter(att => att.correct === value).length;
   };
 
   return (
@@ -226,17 +251,19 @@ const Component = () => {
                     <tbody>
                     <tr className='stat-line'>
                       <td>You</td>
-                      <td>10</td>
-                      <td>15</td>
-                      <td>900</td>
+                      <td>{ countAttempts(attempts[0], true) }</td>
+                      <td>{ countAttempts(attempts[0]) }</td>
+                      <td>{ calcScore(attempts[0]) } </td>
 
                     </tr>
-                    <tr>
-                      <td>Them</td>
-                      <td>5</td>
-                      <td>5</td>
-                      <td>900</td>
-                    </tr>
+                    { data.game.players === 2 &&
+                      <tr>
+                        <td>Them</td>
+                        <td>{ countAttempts(attempts[1], true) }</td>
+                        <td>{ countAttempts(attempts[1]) }</td>
+                        <td>{ calcScore(attempts[1]) } </td>
+                      </tr>
+                    }
                     </tbody>
                   </table>
                   <div className='time'>
