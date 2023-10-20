@@ -5,13 +5,13 @@ export default async ({ publicHash }) => {
     SELECT
       games.completed_at,
       games.duration,
-      games.id,
       games.player_id,
       games.players,
+      games.public_hash as id,
       games.started_at,
       games.user_id,
-      ARRAY_AGG(game_attempts.attempt) as attempts,
-      ARRAY_AGG(game_decks.deck) as deck
+      JSON_AGG(game_attempts.*) AS attempts,
+      game_decks.deck as deck
     FROM
       games
     LEFT JOIN
@@ -22,8 +22,7 @@ export default async ({ publicHash }) => {
       games.public_hash = '${publicHash}'
     GROUP BY
       games.id,
-      game_attempts.attempt::TEXT,
-      game_decks.deck::TEXT
+      game_decks.id
      ;
   `;
 

@@ -11,7 +11,6 @@ export default async () => {
      ;
   `;
 
-  console.log('anon statement', statement);
   try {
     const results = await Database.getInstance().Query(statement);
     return results[0] || {};

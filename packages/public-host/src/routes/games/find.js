@@ -18,7 +18,7 @@ import Domain from '../../interfaces/domain';
 export default {
   passthrough: Domain.Games.Check,
   method: 'GET',
-  name: 'GameCheck',
+  name: 'Game',
   path: '/game/:id',
 
   schema: {

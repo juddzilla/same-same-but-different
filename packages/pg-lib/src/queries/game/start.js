@@ -5,7 +5,7 @@ export default async ({ publicHash }) => {
     UPDATE 
       games 
     SET
-      completed_at = COALESCE(games.completed_at, NOW())
+      started_at = NOW()
     WHERE
       public_hash = '${publicHash}';
   `;

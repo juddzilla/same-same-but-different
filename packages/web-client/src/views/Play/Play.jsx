@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   redirect,
+  useParams,
   useNavigate,
   useLoaderData,
 } from 'react-router-dom';
+
+import ClientUtils from '../../interfaces/clients-lib';
+
+const { CalcScore, CountAttempts } = ClientUtils.Game.ScoreUtil;
 
 import Card from '../../components/Card/Card.jsx';
 import './play.css';
@@ -36,10 +41,11 @@ const toggleBodyEffect = (className) => {
 
 const Component = () => {
   const data = useLoaderData();
+  const params = useParams();
   const navigate = useNavigate();
   console.log('data', data);
-  const id = data.game.id;
-  const Deck = data.deck.map(val => {
+  const id = params.id;
+  const Deck = data.deck.split(',').map(val => {
     return {
       display: true,
       id: val,
@@ -53,12 +59,12 @@ const Component = () => {
 
   // game timer
   const [isActive, setIsActive] = useState(false);
-  const [seconds, setSeconds] = useState(data.game.duration);
-  // const [seconds, setSeconds] = useState(10);
+  const [seconds, setSeconds] = useState(data.duration);
+  // const [seconds, setSeconds] = useState(1000000);
 
   // game score
   const initialAttempts = [[], null];
-  if (data.game.players === 2) { initialAttempts[1] = []; }
+  if (data.players === 2) { initialAttempts[1] = []; }
   const [attempts, setAttempts] = useState(initialAttempts);
 
   const completed = () => {
@@ -88,14 +94,15 @@ const Component = () => {
   });
 
   useEffect(() => {
-    function deselectAll() {
-      for (let j = 0; j < selected.length; j++) {
-        const cardIndex = cards.findIndex((obj => obj.id === selected[j]));
-        cards[cardIndex].selected = false;
-      }
-      setCards(cards);
-      selected = [];
-    }
+    const deselectCards = (exclude) => {
+      return cards.map(card => {
+        if (exclude && exclude.includes(card.id)) {
+          return false;
+        }
+        card.selected = false;
+        return card;
+      }).filter(Boolean);
+    };
 
     webSocket.current = new WebSocket(`${WSHost}/${id}`);
 
@@ -108,24 +115,19 @@ const Component = () => {
         const position = requester ? 0 : 1;
         attempts[position].push(event);
         setAttempts(attempts);
-        console.log('attempts', attempts);
 
         if (event.correct) {
-          const updated = cards.filter(card => {
-            if (!event.selected.includes(card.id)) {
-              return card;
-            }
-          });
-
           toggleBodyEffect('right');
-          setCards([...updated]);
+          setCards(deselectCards(event.selected));
 
           if (requester) {
             selected = [];
           }
+
         } else if (requester) {
           toggleBodyEffect('wrong');
-          deselectAll();
+          setCards(deselectCards());
+          selected = []
         }
       }
 
@@ -197,21 +199,6 @@ const Component = () => {
     waiting: 'Waiting for Player 2'
   };
 
-  const calcScore = (atts) => {
-    return atts.reduce((acc, cur) => {
-      const val = cur.correct ? 10 : -5;
-      acc += val;
-      return acc;
-    }, 0);
-  };
-
-  const countAttempts = (atts, value) => {
-    if (!value) {
-      return atts.length;
-    }
-    return atts.filter(att => att.correct === value).length;
-  };
-
   return (
       <>
         <div id='play-view'>
@@ -251,17 +238,17 @@ const Component = () => {
                     <tbody>
                     <tr className='stat-line'>
                       <td>You</td>
-                      <td>{ countAttempts(attempts[0], true) }</td>
-                      <td>{ countAttempts(attempts[0]) }</td>
-                      <td>{ calcScore(attempts[0]) } </td>
+                      <td>{ CountAttempts(attempts[0], true) }</td>
+                      <td>{ CountAttempts(attempts[0]) }</td>
+                      <td>{ CalcScore(attempts[0]) } </td>
 
                     </tr>
-                    { data.game.players === 2 &&
+                    { data.players === 2 &&
                       <tr>
                         <td>Them</td>
-                        <td>{ countAttempts(attempts[1], true) }</td>
-                        <td>{ countAttempts(attempts[1]) }</td>
-                        <td>{ calcScore(attempts[1]) } </td>
+                        <td>{ CountAttempts(attempts[1], true) }</td>
+                        <td>{ CountAttempts(attempts[1]) }</td>
+                        <td>{ CalcScore(attempts[1]) } </td>
                       </tr>
                     }
                     </tbody>
@@ -283,8 +270,8 @@ const Component = () => {
 
 const Route = {
   loader: async ({ params }) => {
-    const request = await API.GameCheck({ id: params.id });
-    if (request.results.game && request.results.game.completedAt !== null) {
+    const request = await API.GamePlay({ id: params.id });
+    if (request.results && request.results.completedAt !== null) {
       return redirect(`/game/${params.id}`);
     }
 
