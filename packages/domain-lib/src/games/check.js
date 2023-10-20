@@ -1,20 +1,21 @@
 import DB from '../interfaces/db';
 
-const { GameAttempts, Game } = DB;
+const { Game } = DB;
 
 export default async ({ id, userId }) => {
   try {
     const game = await Game.Find({ publicHash: id });
-    // console.log('Game', id, game, userId);
+
+
     if (!game || !game.id) {
       return { game: { id: false } };
     }
 
-    if (![game.userId, game.playerId].includes(userId)) {
-      return {
-        id: false,
-      };
-    }
+    // if (![game.userId, game.playerId].includes(userId)) {
+    //   return {
+    //     id: false,
+    //   };
+    // }
 
     const {
       deck,
@@ -24,17 +25,13 @@ export default async ({ id, userId }) => {
       completedAt,
     } = game;
 
-    // console.log('deck spit', deck.split(','));
-    console.log('deck parse', typeof deck);
+    // const nowInUnix = parseInt((new Date().getTime() / 1000).toFixed(0));
+    // const startedAtPlusDuration = parseInt((new Date(startedAt).getTime() / 1000).toFixed(0)) + duration;
 
-    const nowInUnix = parseInt((new Date().getTime() / 1000).toFixed(0));
-    const startedAtPlusDuration = parseInt((new Date(startedAt).getTime() / 1000).toFixed(0)) + duration;
+    // if (startedAtPlusDuration < nowInUnix) {
+    //
+    // }
 
-    if (startedAtPlusDuration < nowInUnix) {
-
-    }
-    console.log();
-    console.log();
     const response = {
       deck: deck[0].split(','),
       game: {

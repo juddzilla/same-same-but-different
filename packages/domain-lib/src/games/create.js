@@ -21,6 +21,7 @@ export default async ({ duration, players, userId }) => {
     }
 
     const Game = await Games.Create(opts);
+    console.log('GAME', Game);
 
     const deck = NewDeck();
     await GameDecks.Create({

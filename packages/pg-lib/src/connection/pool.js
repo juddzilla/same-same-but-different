@@ -11,7 +11,6 @@ export default class ConnectionPool {
       const results = await this.instance.query(statement);
       return results.rows;
     } catch (error) {
-        console.log('EERR', error);
       return {
         error: {
           code: parseInt(error.code, 10),

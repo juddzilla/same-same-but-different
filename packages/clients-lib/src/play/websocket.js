@@ -1,25 +1,44 @@
 // import StateHook from './stateHook';
 // const useCustomState = StateHook([]);
-export default (url, id, [attempts, updateAttempts]) => {
-  // const [state, setState] = useCustomState([]);
-  console.log('STATE', attempts);
+// export default (url, id, onMessage) => {
+//   // const [state, setState] = useCustomState([]);
+//   // console.log('STATE', state);
+//
+//   const WS = new WebSocket(`${url}/${id}`);
+//   // Connection opened
+//   WS.addEventListener("open", (event) => {
+//     WS.send(JSON.stringify({ game: { id }}));
+//   });
+//
+// // Listen for messages
+//   WS.addEventListener("message", onMessage);
+//
+//   return {
+//     send: WS.send,
+//   };
+// };
 
-  const WS = new WebSocket(`${url}/${id}`);
-  // Connection opened
-  WS.addEventListener("open", (event) => {
-    WS.send(JSON.stringify({ game: { id }}));
-  });
+import Subscription from './subscription';
+
+export default class {
+  constructor(props) {
+    const { id, url } = props;
+
+    this.connection = new WebSocket(`${url}/${id}`);
+
+    this.connection.addEventListener("open", (event) => {
+      console.log('opened');
+      // this.connection.send(JSON.stringify({ game: { id }}));
+    });
 
 // Listen for messages
-  WS.addEventListener("message", (event) => {
-    const attempt = JSON.parse(event.data);
-    const s = attempts;
-    attempts.push(attempt)
-    updateAttempts(attempts);
-    console.log("Message from server ", attempt);
-  });
+    this.connection.addEventListener("message", function(event) {
+      const attempt = JSON.parse(event.data);
+      Subscription.notify(attempt)
+    });
+  }
 
-  return {
-    send: WS.send,
-  };
-};
+  send(message) {
+    this.connection.send(JSON.stringify(message));
+  }
+}

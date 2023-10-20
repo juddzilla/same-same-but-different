@@ -5,6 +5,8 @@ import List from '../operations/list';
 import Update from '../operations/update';
 
 import Game from './game';
+import GameAttempt from './game-attempt';
+import User from './user';
 import UserSession from './user-session';
 
 const tables = [
@@ -34,6 +36,8 @@ const standards = tables.reduce((acc, table) => {
   return acc;
 }, {
   Game,
+  GameAttempt,
+  User,
   UserSession,
 });
 

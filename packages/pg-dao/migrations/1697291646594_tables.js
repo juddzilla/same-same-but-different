@@ -107,7 +107,7 @@ const tables = {
     schema: {
       id: 'primaryId',
       created_at: 'createdAt',
-      name: 'name',
+      name: { type: 'text' },
       email: 'text',
     },
     constraints: [

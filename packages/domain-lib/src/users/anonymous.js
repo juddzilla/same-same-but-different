@@ -1,8 +1,8 @@
 import DB from '../interfaces/db';
 
-export default async (values) => {
+export default async () => {
   try {
-    const User = await DB.Users.Create(values);
+    const User = await DB.User.Anonymous();
     return User;
   } catch (err) {
     console.warn('Create User err', err);

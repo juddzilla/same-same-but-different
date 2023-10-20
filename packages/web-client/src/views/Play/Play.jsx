@@ -1,17 +1,31 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import API from '../../interfaces/public-host';
+import { useEffect, useRef, useState } from 'react';
+import {
+  redirect,
+  useNavigate,
+  useLoaderData,
+} from 'react-router-dom';
+
 import Card from '../../components/Card/Card.jsx';
 import './play.css';
+
 import ENV from '../../interfaces/environment';
+import API from "../../interfaces/public-host.js";
 const { WSHost } = ENV;
-
-import ClientUtil from '../../interfaces/clients-lib';
-
-const { StateHook, Websocket } = ClientUtil.Play;
 
 let selected = [];
 
+const equalsCheck = (a, b) =>
+    a.length === b.length &&
+    a.every((e) => b.includes(e));
+
+const toggleBodyEffect = (className) => {
+  const body = document.body;
+  body.classList.add(className);
+
+  setTimeout(() => {
+    body.classList.remove(className);
+  }, 300);
+};
 // get user game
 // get game
 // verify game is not completed
@@ -20,168 +34,236 @@ let selected = [];
 // if 2p, and user !== creator, and !player_id, prompt to join
 // once 2 players in room, initiate game
 
-const useCustomState = StateHook([]);
-export default (id, deck) => {
-  const [state, setState] = useCustomState();
-  const gameplay = Websocket(WSHost, id, [state, setState]);
-
-  const { send } = gameplay;
-  console.log('state', state);
-  // console.log('STATE', state);
-
-  // setTimeout(() => {
-  //   setState('next');
-  //   setTimeout(() => {
-  //     console.log('state', state);
-  //   }, 1000);
-  // }, 2000);
-  const Deck = deck.map(id => {
+const Component = () => {
+  const data = useLoaderData();
+  console.log('data', data);
+  const id = data.game.id;
+  const Deck = data.deck.map(val => {
     return {
       display: true,
-      id,
+      id: val,
       selected: false,
     };
   });
 
   const [cards, setCards] = useState(Deck);
+  const [display, setDisplay]= useState('loading');
+  const webSocket = useRef(null);
 
-  const select = (id) => {
-    const cardIndex = cards.findIndex((obj => obj.id === id));
-    const index = selected.indexOf(id);
+  // game timer
+  const [isActive, setIsActive] = useState(false);
+  const [seconds, setSeconds] = useState(data.game.duration);
+
+  function completed() {
+    webSocket.current.send(JSON.stringify({
+      type: 'completed',
+      id,
+    }));
+    setDisplay('completed');
+    setTimeout(function() {
+      useNavigate(`/game/${id}`);
+    }, 2000);
+  }
+
+  // useEffect(() => {
+  //   let timer = null;
+  //   if (isActive) {
+  //     timer = setInterval(() => {
+  //       setSeconds((seconds) => seconds - 1);
+  //     }, 1000);
+  //
+  //     if (seconds < 1) {
+  //       clearInterval(timer);
+  //       completed();
+  //     }
+  //   }
+  //   return () => { clearInterval(timer); };
+  // });
+
+
+  useEffect(() => {
+    function deselectAll() {
+      for (let j = 0; j < selected.length; j++) {
+        const cardIndex = cards.findIndex((obj => obj.id === selected[j]));
+        cards[cardIndex].selected = false;
+      }
+      setCards(cards);
+      selected = [];
+    }
+
+    webSocket.current = new WebSocket(`${WSHost}/${id}`);
+
+    webSocket.current.onmessage = ({ data }) => {
+      const event = JSON.parse(data);
+      console.log('event', event);
+
+      if (event.type === 'attempt') {
+        const requester = equalsCheck(event.selected, selected);
+
+        if (event.correct) {
+          const updated = cards.filter(card => {
+            if (!event.selected.includes(card.id)) {
+              return card;
+            }
+          });
+
+          toggleBodyEffect('right');
+          setCards([...updated]);
+
+          if (requester) {
+            selected = [];
+          }
+        } else if (requester) {
+          toggleBodyEffect('wrong');
+          deselectAll();
+        }
+      }
+
+      if (event.type === 'close') {
+          webSocket.current.close();
+      }
+
+      if (event.type === 'start') {
+        setDisplay('countdown');
+        setTimeout(function() {
+          setDisplay('play');
+          setIsActive(true);
+        }, 3000);
+      }
+
+      if (event.type === 'waiting') {
+        setDisplay('waiting');
+      }
+    };
+
+    // webSocket.current.onclose = (event) => {
+    //   console.log('close event', event);
+    //   // redirect to stats
+    // }
+
+    return () => webSocket.current.close();
+  }, []);
+
+  const select = (card) => {
+    const cardIndex = cards.findIndex((obj => obj.id === card));
+    const index = selected.indexOf(card);
     let selectedValue = false;
+
+    function submit() {
+      if (selected.length !== 3) {
+        return;
+      }
+
+      const attempt = {
+        id,
+        type: 'attempt',
+        values: {
+          selected,
+        },
+      };
+      webSocket.current.send(JSON.stringify(attempt));
+    }
+
     if (selected.length === 3) {
       if (index > -1) {
         selected.splice(index, 1);
       }
     } else if (index === -1) {
-      selected.push(id)
+      selected.push(card)
       selectedValue = true;
     } else {
       selected.splice(index, 1);
     }
 
-    guess();
+    submit();
     cards[cardIndex].selected = selectedValue;
     setCards([...cards]);
   };
 
-  const guess = () => {
-    if (selected.length !== 3) {
-      return;
-    }
-    // send values to server for validation
-    // server sends back yes or no
-    // if yes, correct();
-    // if no, wrong();
-    function update(c) {
-      setCards([...c]);
-      selected = [];
-    }
-    const remove = () => {
-      for (let j = 0; j < selected.length; j++) {
-        const cardIndex = cards.findIndex((obj => obj.id === selected[j]));
-        cards.splice(cardIndex, 1);
-      }
-      update(cards);
-    };
-
-    const correct = () => {
-      const body = document.body;
-      body.classList.add('right');
-
-      setTimeout(() => {
-        body.classList.remove('right');
-        remove();
-      }, 300);
-    }
-
-    const wrong = () => {
-      const body = document.body;
-      body.classList.add('wrong');
-
-      setTimeout(() => {
-        body.classList.remove('wrong');
-        for (let j = 0; j < selected.length; j++) {
-          const cardIndex = cards.findIndex((obj => obj.id === selected[j]));
-          cards[cardIndex].selected = false;
-        }
-        update(cards);
-      }, 300);
-    };
-
-    // below is eventual server code //
-    const allSame = arr => arr.every(v => v === arr[0]);
-    const allUnique = arr => arr.length === new Set(arr).size;
-
-    const splits = selected.reduce((acc, current, index) => {
-      const parts = current.split("");
-      for (let j = 0; j < parts.length; j++) {
-        if (!Object.hasOwn(acc, j)) {
-          acc[j] = [];
-        }
-
-        acc[j].push(parts[j]);
-      }
-
-      return acc;
-    }, {});
-
-    const winner = Object.values(splits).every(split => {
-      return allSame(split) || allUnique(split);
-    });
-
-    const outcome = winner ? correct : wrong;
-    outcome();
-  };
   return (
       <>
         <div id='play-view'>
           <div className='play-board'>
-            {
-              cards.map((card, index) => (
-                  <div key={index} onClick={select.bind(null, card.id)}>
-                    { Card(card) }
-                  </div>
-              ))
+            { display === 'loading' &&
+                <div>Loading</div>
+            }
+
+            { display === 'waiting' &&
+                <div>Waiting</div>
+            }
+
+            { display === 'countdown' &&
+                <div>Countdown</div>
+            }
+
+            { display === 'play' &&
+                cards.map((card, index) => (
+                    <div key={index} onClick={select.bind(null, card.id)}>
+                      { Card(card) }
+                    </div>
+                ))
+            }
+
+            { display === 'completed' &&
+                <div>Doing final calculations</div>
             }
           </div>
-          <div className='play-footer'>
-            <div className='play-footer-content'>
+          {display === 'play' &&
+              <div className='play-footer'>
+                <div className='play-footer-content'>
 
-              <table className='score-board'>
-                <thead>
-                <tr>
-                  <th></th>
-                  <th className='stat-cats'>FGM</th>
-                  <th className='stat-cats'>FGA</th>
-                  <th className='stat-cats'>Points</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr className='stat-line'>
-                  <td>You</td>
-                  <td>10</td>
-                  <td>15</td>
-                  <td>900</td>
+                  <table className='score-board'>
+                    <thead>
+                    <tr>
+                      <th></th>
+                      <th className='stat-cats'>FGM</th>
+                      <th className='stat-cats'>FGA</th>
+                      <th className='stat-cats'>Points</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr className='stat-line'>
+                      <td>You</td>
+                      <td>10</td>
+                      <td>15</td>
+                      <td>900</td>
 
-                </tr>
-                <tr>
-                  <td>Them</td>
-                  <td>5</td>
-                  <td>5</td>
-                  <td>900</td>
-                </tr>
-                </tbody>
-              </table>
-              <div className='time'>
-                5:00
+                    </tr>
+                    <tr>
+                      <td>Them</td>
+                      <td>5</td>
+                      <td>5</td>
+                      <td>900</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <div className='time'>
+                    { seconds }
+                  </div>
+                  <div className='actions'>
+                    <button>Concede</button>
+                  </div>
+                </div>
               </div>
-              <div className='actions'>
-                <button>Concede</button>
-              </div>
-            </div>
-          </div>
+          }
+
         </div>
       </>
   )
 };
+
+const Route = {
+  loader: async ({ params }) => {
+    const request = await API.GameCheck({ id: params.id });
+    console.log('request', request.results.game);
+    if (request.results.game && request.results.game.completedAt !== null) {
+      return redirect(`/game/${params.id}`);
+    }
+
+    return request.results;
+  },
+  path: "/play/:id",
+  element: <Component />,
+};
+
+export default Route;

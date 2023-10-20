@@ -1,17 +1,37 @@
-export default function() {
-  const subscribers = new Set();
+// export default function() {
+//   const subscribers = new Set();
+//
+//   return {
+//     subscribe: function(cb) {
+//       subscribers.add(cb);
+//     },
+//
+//     unsubscribe: function(cb) {
+//       subscribers.delete(cb);
+//     },
+//
+//     notify: function(message) {
+//       subscribers.forEach((cb) => cb(message));
+//     },
+//   };
+// }
 
-  return {
-    subscribe: function(cb) {
-      subscribers.add(cb);
-    },
+class Subscription {
+  constructor() {
+    this.subscriptions = new Set();
+  }
 
-    unsubscribe: function(cb) {
-      subscribers.delete(cb);
-    },
+  subscribe(cb) {
+    this.subscriptions.add(cb);
+  }
 
-    notify: function(message) {
-      subscribers.forEach((cb) => cb(message));
-    },
-  };
+  unsubscribe(cb) {
+    this.subscriptions.delete(cb);
+  }
+
+  notify(message) {
+    this.subscriptions.forEach(cb => cb(message));
+  }
 }
+
+export default new Subscription();

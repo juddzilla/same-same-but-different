@@ -7,7 +7,6 @@ const { UserSession } = DB;
 // const { AuthToken } = Cache;
 
 export default async function tokens(tokens) {
-  console.log('TOENS', tokens);
   if (!tokens) {
     return false;
   }

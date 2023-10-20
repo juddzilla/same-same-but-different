@@ -3,6 +3,8 @@ import ENV from './interfaces/environment';
 import Domain from './interfaces/domain';
 const { websocketPort } = ENV;
 
+const Rooms = {};
+
 const parseCookie = str =>
     str
         .split(';')
@@ -38,28 +40,90 @@ const wss = new WebSocketServer({
 wss.on('connection', async function connection(ws, request) {
   const cookies = parseCookie(request.headers.cookie);
   const userId = await Domain.Auth.CookieUser(cookies);
-  console.log('userId', userId);
-
-  if (!userId) {
-    // send message
-    // disconnect
-  }
-  ws.on('error', console.error);
   const publicHash = request.url.replace(/\//g, "");
 
+  if (!userId || !publicHash) {
+    ws.close(1000, JSON.stringify({ type: 'error', code: 400 }));
+  }
 
-  console.log('publicHash', publicHash);
+  const Game = await Domain.Games.Find({ publicHash });
 
-  ws.on('message', function message(data) {
-    console.log(`MESSAGE EVENT ${data}`);
+  if (!Game || !Object.hasOwn(Game, 'id')) {
+    ws.close(1000, JSON.stringify({ type: 'error', code: 404 }));
+  }
+
+  if (!Object.hasOwn(Rooms, publicHash)) {
+    Rooms[publicHash] = {
+      connections: [],
+      players: Game.players,
+      users: [],
+    };
+  }
+
+  if (Rooms[publicHash].users.indexOf(userId) === -1) {
+    Rooms[publicHash].users.push(userId);
+  }
+  Rooms[publicHash].connections.push(ws);
+
+
+  setTimeout(function() {
+    if (Rooms[publicHash].users.length === Rooms[publicHash].players) {
+      const start = {
+        gameId: publicHash,
+        type: 'start',
+      };
+      ws.send(JSON.stringify(start));
+    } else {
+      const waiting = {
+        gameId: publicHash,
+        type: 'waiting',
+      };
+      ws.send(JSON.stringify(waiting));
+    }
+  }, 2000);
+
+  ws.on('error', console.error);
+
+  ws.on('close', function() {
+    if (Object.hasOwn(Rooms, publicHash)) {
+      const index = Rooms[publicHash].connections.indexOf(ws);
+      Rooms[publicHash].connections.splice(index, 1);
+      if (Object.hasOwn(Rooms, publicHash) && !Rooms[publicHash].connections.length) {
+        delete Rooms[publicHash];
+        // Domain.Game.Complete({ publicHash });
+      }
+    }
   });
 
-  setTimeout(() => {
-    // send correct to all, send wrong to sender only
-    ws.send(JSON.stringify({
-      correct: false,
-      attempts: [1234, 1222, 1333],
-      gameId: publicHash,
-    }));
-  }, 5000);
+  ws.on('message', async function message(event) {
+    const data = JSON.parse(event);
+    const { id, type } = data;
+
+    // console.log('data', data);
+    if (type === 'attempt') {
+      const correct = Domain.Attempts.Validate(data.values.selected);
+      await Domain.GameAttempt.Create({
+        attempt: `'${JSON.stringify(data.values.selected)}'`,
+        correct,
+        publicHash,
+        userId,
+      });
+
+      const response = {
+        correct,
+        selected: data.values.selected,
+        gameId: id,
+        type: 'attempt',
+      };
+
+      for (let j = 0; j < Rooms[response.gameId].connections.length; j++) {
+        Rooms[response.gameId].connections[j].send(JSON.stringify(response));
+      }
+    }
+
+    if (type === 'completed') {
+      ws.close(1000, JSON.stringify({ type: 'completed', code: 200 }));
+      await Domain.Game.Complete({ publicHash: data.id });
+    }
+  });
 });

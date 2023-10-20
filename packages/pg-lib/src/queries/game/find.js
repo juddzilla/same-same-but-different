@@ -1,17 +1,11 @@
 import Database from '../../connection/instance';
 
-// completedAt,
-//     duration,
-//     id: publicHash,
-//     players,
-//     startedAt,
-
 export default async ({ publicHash }) => {
   const statement = `
     SELECT
       games.completed_at,
       games.duration,
-      games.public_hash as id,
+      games.id,
       games.player_id,
       games.players,
       games.started_at,
@@ -32,7 +26,7 @@ export default async ({ publicHash }) => {
       game_decks.deck::TEXT
      ;
   `;
-  console.log('statement', statement);
+
   try {
     const results = await Database.getInstance().Query(statement);
     return results[0] || {};

@@ -1,8 +1,7 @@
-import { useLoaderData } from 'react-router-dom';
+import { redirect, useLoaderData } from 'react-router-dom';
 import API from '../../interfaces/public-host';
-import Review from './Review.jsx';
-import Play from '../Play/Play.jsx';
 import NotFound from './NotFound.jsx';
+
 // get user game
 // get game
 // verify game is not completed
@@ -24,14 +23,12 @@ const Component = () => {
         </>
     )
   }
+
+  // const socket = new Websocket({ id: data.game.id, url: WSHost });
   return (
       <>
         <div id='game-view'>
-          { data.game.completedAt !== null ? (
-              Review(data)
-          ) : (
-              Play(data.game.id, data.deck)
-          ) }
+          Review
         </div>
       </>
   )
@@ -39,8 +36,13 @@ const Component = () => {
 
 const Route = {
   loader: async ({ params }) => {
-    const game = await API.GameCheck({ id: params.id });
-    return game.results;
+    const request = await API.GameCheck({ id: params.id });
+
+    if (request.results.game.completedAt === null) {
+      return redirect(`/play/${params.id}`);
+    }
+
+    return request.results;
   },
   path: "/game/:id",
   element: <Component />,
