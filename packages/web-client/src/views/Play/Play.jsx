@@ -36,6 +36,7 @@ const toggleBodyEffect = (className) => {
 
 const Component = () => {
   const data = useLoaderData();
+  const navigate = useNavigate();
   console.log('data', data);
   const id = data.game.id;
   const Deck = data.deck.map(val => {
@@ -52,34 +53,34 @@ const Component = () => {
 
   // game timer
   const [isActive, setIsActive] = useState(false);
-  const [seconds, setSeconds] = useState(data.game.duration);
+  // const [seconds, setSeconds] = useState(data.game.duration);
+  const [seconds, setSeconds] = useState(10);
 
-  function completed() {
+  const completed = () => {
     webSocket.current.send(JSON.stringify({
       type: 'completed',
       id,
     }));
     setDisplay('completed');
-    setTimeout(function() {
-      useNavigate(`/game/${id}`);
+    setTimeout(() => {
+      navigate(`/game/${id}`);
     }, 2000);
   }
 
-  // useEffect(() => {
-  //   let timer = null;
-  //   if (isActive) {
-  //     timer = setInterval(() => {
-  //       setSeconds((seconds) => seconds - 1);
-  //     }, 1000);
-  //
-  //     if (seconds < 1) {
-  //       clearInterval(timer);
-  //       completed();
-  //     }
-  //   }
-  //   return () => { clearInterval(timer); };
-  // });
+  useEffect(() => {
+    let timer = null;
+    if (isActive) {
+      timer = setInterval(() => {
+        setSeconds((seconds) => seconds - 1);
+      }, 1000);
 
+      if (seconds < 1) {
+        clearInterval(timer);
+        completed();
+      }
+    }
+    return () => { clearInterval(timer); };
+  });
 
   useEffect(() => {
     function deselectAll() {
@@ -95,7 +96,7 @@ const Component = () => {
 
     webSocket.current.onmessage = ({ data }) => {
       const event = JSON.parse(data);
-      console.log('event', event);
+      // console.log('event', event);
 
       if (event.type === 'attempt') {
         const requester = equalsCheck(event.selected, selected);
@@ -180,20 +181,21 @@ const Component = () => {
     setCards([...cards]);
   };
 
+  const displayMap = {
+    countdown: 'Get Ready',
+    loading: 'Loading',
+    waiting: 'Waiting for Player 2'
+  };
+
   return (
       <>
         <div id='play-view'>
           <div className='play-board'>
-            { display === 'loading' &&
-                <div>Loading</div>
-            }
-
-            { display === 'waiting' &&
-                <div>Waiting</div>
-            }
-
-            { display === 'countdown' &&
-                <div>Countdown</div>
+            { display !== 'play' &&
+                <div className={`pending ${display}`}>
+                  <div className='circle'></div>
+                  <h1>{ displayMap[display] }</h1>
+                </div>
             }
 
             { display === 'play' &&
@@ -255,7 +257,6 @@ const Component = () => {
 const Route = {
   loader: async ({ params }) => {
     const request = await API.GameCheck({ id: params.id });
-    console.log('request', request.results.game);
     if (request.results.game && request.results.game.completedAt !== null) {
       return redirect(`/game/${params.id}`);
     }

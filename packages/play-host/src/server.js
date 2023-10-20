@@ -6,13 +6,13 @@ const { websocketPort } = ENV;
 const Rooms = {};
 
 const parseCookie = str =>
-    str
-        .split(';')
-        .map(v => v.split('='))
-        .reduce((acc, v) => {
-          acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
-          return acc;
-        }, {});
+  str
+    .split(';')
+    .map(v => v.split('='))
+    .reduce((acc, v) => {
+      acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+      return acc;
+    }, {});
 
 const wss = new WebSocketServer({
   port: websocketPort,
@@ -37,17 +37,23 @@ const wss = new WebSocketServer({
   }
 });
 
+function broadcastToRoom(room, data) {
+  Rooms[room].connections.forEach(connection => connection.send(JSON.stringify(data)));
+}
+
 wss.on('connection', async function connection(ws, request) {
   const cookies = parseCookie(request.headers.cookie);
   const userId = await Domain.Auth.CookieUser(cookies);
   const publicHash = request.url.replace(/\//g, "");
 
+  // verify user and game public hash
   if (!userId || !publicHash) {
     ws.close(1000, JSON.stringify({ type: 'error', code: 400 }));
   }
 
   const Game = await Domain.Games.Find({ publicHash });
 
+  // verify game exists
   if (!Game || !Object.hasOwn(Game, 'id')) {
     ws.close(1000, JSON.stringify({ type: 'error', code: 404 }));
   }
@@ -63,24 +69,16 @@ wss.on('connection', async function connection(ws, request) {
   if (Rooms[publicHash].users.indexOf(userId) === -1) {
     Rooms[publicHash].users.push(userId);
   }
+
   Rooms[publicHash].connections.push(ws);
 
-
   setTimeout(function() {
-    if (Rooms[publicHash].users.length === Rooms[publicHash].players) {
-      const start = {
-        gameId: publicHash,
-        type: 'start',
-      };
-      ws.send(JSON.stringify(start));
-    } else {
-      const waiting = {
-        gameId: publicHash,
-        type: 'waiting',
-      };
-      ws.send(JSON.stringify(waiting));
-    }
-  }, 2000);
+    const data = {
+      gameId: publicHash,
+      type: Rooms[publicHash].users.length === Rooms[publicHash].players ? 'start' : 'waiting',
+    };
+    broadcastToRoom(publicHash, data);
+  }, 1200);
 
   ws.on('error', console.error);
 
@@ -90,7 +88,7 @@ wss.on('connection', async function connection(ws, request) {
       Rooms[publicHash].connections.splice(index, 1);
       if (Object.hasOwn(Rooms, publicHash) && !Rooms[publicHash].connections.length) {
         delete Rooms[publicHash];
-        // Domain.Game.Complete({ publicHash });
+        // Domain.Game.Complete({ publicHash }); TODO uncomment
       }
     }
   });
@@ -99,7 +97,6 @@ wss.on('connection', async function connection(ws, request) {
     const data = JSON.parse(event);
     const { id, type } = data;
 
-    // console.log('data', data);
     if (type === 'attempt') {
       const correct = Domain.Attempts.Validate(data.values.selected);
       await Domain.GameAttempt.Create({
@@ -116,9 +113,7 @@ wss.on('connection', async function connection(ws, request) {
         type: 'attempt',
       };
 
-      for (let j = 0; j < Rooms[response.gameId].connections.length; j++) {
-        Rooms[response.gameId].connections[j].send(JSON.stringify(response));
-      }
+      broadcastToRoom(response.gameId, response);
     }
 
     if (type === 'completed') {
