@@ -6,18 +6,6 @@
     align-items: center;
 }
 
-.color-one {
-    --color: #009698
-}
-
-.color-two {
-    --color: #F7CE9C
-}
-
-.color-three {
-    --color: #E86D6D
-}
-
 .fill-one {
     /*dots*/
     background-image:

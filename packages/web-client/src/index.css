@@ -46,3 +46,16 @@ header {
   left: 0;
   z-index: 1;
 }
+
+
+.color-one {
+  --color: #009698
+}
+
+.color-two {
+  --color: #F7CE9C
+}
+
+.color-three {
+  --color: #E86D6D
+}
