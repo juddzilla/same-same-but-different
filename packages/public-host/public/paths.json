@@ -18,5 +18,9 @@
   "AuthCheck": {
     "method": "GET",
     "path": "/whothatis"
+  },
+  "Account": {
+    "method": "GET",
+    "path": "/account"
   }
 }

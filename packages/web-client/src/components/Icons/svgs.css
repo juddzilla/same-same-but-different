@@ -1,0 +1,8 @@
+.Icon {
+    &.sun svg,
+    &.moon svg,
+    &.star svg
+     {
+        fill: white;
+     }
+}

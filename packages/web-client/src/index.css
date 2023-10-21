@@ -1,14 +1,14 @@
 :root {
   --off-black: #343231;
   --max-width: 1440px;
+  --header-height: 64px;
 
   background-color: #FAF4F0;
   color: var(--off-black);
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: 400;
   line-height: 1.5;
-  margin: 0 auto;
-  max-width: var(--max-width);
+  /*max-width: var(--max-width);*/
   position: relative;
   width: 100%;
 
@@ -26,27 +26,75 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: inherit;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #E86D6D;
 }
 
 body {
-  padding-top: 50px;
+  padding-top: var(--header-height);
+}
+
+h1 {
+  color: white;
+  margin-block-start: 0;
+  margin-block-end: 0;
+
+  &.headline {
+     font-size: 360px;
+     position: absolute;
+     top: 0;
+   }
+
 }
 
 header {
-  width: 100%;
-  height: 50px;
-  background-color: #8AD19F;
+  align-items: center;
+  background-color: var(--off-black);
+  color: white;
+  display: flex;
+  font-size: 18px;
+  height: var(--header-height);
+  /*justify-content: center;*/
+  left: 0;
+  padding: 0 24px;
   position: absolute;
   top: 0;
-  left: 0;
+  width: 100vw;
   z-index: 1;
+
+  .header-container {
+    align-items: center;
+    display: flex;
+    width: 100%;
+
+    .account {
+      display: flex;
+      flex: 1;
+      justify-content: flex-end;
+
+      svg { transform: scale(0.7) }
+      svg path, svg circle { stroke: white; }
+    }
+  }
+
+  a {
+    /*font-size: 24px;*/
+    margin-right: 24px;
+  }
+
 }
 
+#root {
+  display: flex;
+  justify-content: center;
+
+  > * {
+    width: 100%;
+  }
+}
 
 .color-one {
   --color: #009698

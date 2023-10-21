@@ -1,11 +1,13 @@
 import svgs from './svgs';
+import './svgs.css';
 
 export default (name) => {
   console.log('name', name);
   const icon = !Object.hasOwn(svgs, name) ? 'warning' : name;
+  const iconClassList = ['Icon', name];
   return (
       <>
-        <div className='Icon' dangerouslySetInnerHTML={{__html:svgs[icon]}}/>
+        <div className={ iconClassList.join(' ') } dangerouslySetInnerHTML={{__html:svgs[icon]}}/>
       </>
   );
 }

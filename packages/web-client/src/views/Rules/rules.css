@@ -1,0 +1,72 @@
+.how-to-play {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+
+    h1 {
+        font-size: 200px;
+        line-height: 1.2;
+    }
+
+    h2, h3 {
+        text-transform: capitalize;
+        margin-block-end: 8px;
+    }
+
+    .example {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        font-size: 16px;
+        margin: 48px 0 64px;
+
+        .correct-icon {
+            display: flex;
+            align-items: center;
+            height: 110px;
+
+            .Icon {
+                height: 64px;
+                margin-left: 16px;
+
+            svg {
+                transform: scale(0.8);
+            }
+
+            path {
+                stroke: var(--off-black);
+            }
+
+            }
+        }
+
+    }
+
+    .example-cards {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 8px;
+    }
+
+    .example-heading {
+        align-items: center;
+        display: flex;
+
+        svg {
+          transform: scale(0.7) translateY(4px);
+        }
+    }
+
+    .example-explanation {
+        align-items: center;
+        display: flex;
+        font-weight: bold;
+        justify-content: space-between;
+        padding: 0 108px 0 32px;
+
+
+    }
+
+    .how-to-play-container { max-width: 800px; }
+}

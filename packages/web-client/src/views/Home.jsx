@@ -1,8 +1,8 @@
 const Component = () => {
   return (
       <>
-        <div>
-          <h1>Homee</h1>
+        <div className='home-view'>
+          <h1 className='headline'>Homee</h1>
         </div>
       </>
   )

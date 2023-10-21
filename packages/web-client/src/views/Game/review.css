@@ -80,6 +80,24 @@
         font-size: 20px;
     }
 
+    &.selected-mine {
+        .attempts-theirs { display: none }
+        .score-theirs { transform: scale(0.8); opacity: 0.7; }
+    }
+
+    &.selected-theirs {
+        .attempts-mine { display: none }
+        .score-mine { transform: scale(0.8); opacity: 0.7; }
+    }
+
+    &.players-1 {
+        .score-mine .player-name,
+        .score-theirs,
+        .player-attempt h4,
+        .attempts-theirs
+        { display: none!important; }
+     }
+
     .game-heading {
         height: 150px;
         display: flex;
@@ -89,6 +107,19 @@
 
     .game-info {
         position: relative;
+        height: 250px;
+        padding-top: 64px;
+        font-size: 20px;
+        width: 720px;
+
+        .game-date {
+            font-weight: bold;
+        }
+
+        .game-duration {
+            font-size: 16px;
+            margin-top: 0;
+        }
     }
     .game-score {
         align-items: center;
@@ -96,36 +127,100 @@
         font-size: 20px;
     }
 
-    .Icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
 
-        path {
-            stroke: var(--off-black);
-        }
 
-        svg {
-            transform: scale(0.62);
+    .outcome {
+        margin-right: 8px;
+
+        .Icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            path {
+                stroke: white;
+                stroke-width: 2.5;
+            }
+
+            svg {
+                transform: scale(1.2) translateY(-2px) translateX(-13px);
+                z-index: -1;
+            }
         }
     }
 
-    .outcome { margin-right: 8px;}
+    .player-attempt .attempts {
+        padding-left: 96px;
+    }
+
+    .player-attempt { padding-top: 16px; }
+    .player-attempt {
+        padding: 64px 0 32px;
+        position: relative;
+
+        h4 {
+            color: white;
+            font-size: 84px;
+            position: absolute;
+            top: 0px;
+            left: 32px;
+            z-index: -1;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            line-height: 1;
+        }
+    }
     .player-scores {
         display: flex;
-    }
 
-    players1 {
-        .p2 {
-            display: none;
+        .player-name {
+            padding: 16px;
+            font-size: 30px;
+            font-weight: bold;
+            text-transform: capitalize;
+            transition: transform 90ms linear;
+            z-index: 2;
+
+            cursor: pointer;
+
+            &:hover {
+                transform: scale(1.2);
+             }
+        }
+
+        .player-score {
+            display: flex;
+            align-items: center;
+            transition: transform 180ms linear, opacity 180ms linear;
+
+            &.score-theirs {
+                flex-direction: row-reverse;
+             }
+
+             &:hover {
+                opacity: 1;
+              }
+        }
+
+        .score {
+            font-size: 22px;
+        }
+
+        .attempt-ratio {
+            font-size: 18px;
+            font-weight: 300;
+            text-align: center;
         }
     }
 
     .game-attempts {
+        transform: translateX(-36px);
         .attempt {
             align-items: center;
             display: flex;
             margin-bottom: 16px;
+
+            &.incorrect .cards { opacity: 0.6 }
         }
         .cards {
             display: flex;

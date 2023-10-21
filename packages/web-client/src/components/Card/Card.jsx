@@ -1,8 +1,6 @@
 import './Card.css';
 
-import One from './Octagon.jsx';
-import Two from './Flare.jsx';
-import Three from './Triangle.jsx';
+import Icon from '../../components/Icons';
 
 const map = {
   toWord: {
@@ -11,9 +9,9 @@ const map = {
     3: 'three',
   },
   shape: {
-    1: One,
-    2: Two,
-    3: Three,
+    1: 'sun',
+    2: 'moon',
+    3: 'star',
   },
 };
 
@@ -41,8 +39,7 @@ export default ({ id, selected }) => {
           <div className='shapes'>
             {
               [...Array(parseInt(quantity, 10))].map((n, i) => (
-                  <Shape key={i}/>
-
+                  Icon(Shape)
               ))
             }
           </div>

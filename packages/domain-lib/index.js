@@ -1,3 +1,4 @@
+import Account from './src/account';
 import Attempts from './src/attempts';
 import Auth from './src/auth';
 import Deck from './src/deck';
@@ -10,6 +11,7 @@ import Users from './src/users';
 import UserSessions from './src/user-sessions';
 
 export default {
+  Account,
   Attempts,
   Auth,
   Deck,
