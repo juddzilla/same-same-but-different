@@ -1,3 +1,5 @@
+import API from '../interfaces/public-host';
+
 const Component = () => {
   return (
       <div className='user-account'>
@@ -9,8 +11,13 @@ const Component = () => {
 };
 
 const Route = {
-  path: "/account",
   element: <Component />,
+  loader: async () => {
+    const request = await API.Account();
+
+    return request.results;
+  },
+  path: "/account",
 };
 
 export default Route;

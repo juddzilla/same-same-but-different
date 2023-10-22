@@ -7,15 +7,14 @@ import {
 } from 'react-router-dom';
 
 import ClientUtils from '../../interfaces/clients-lib';
+import ENV from '../../interfaces/environment';
+import API from '../../interfaces/public-host';
+import Card from '../../components/Card/Card.jsx';
 
 const { CalcScore, CountAttempts } = ClientUtils.Game.ScoreUtil;
-
-import Card from '../../components/Card/Card.jsx';
-import './play.css';
-
-import ENV from '../../interfaces/environment';
-import API from "../../interfaces/public-host.js";
 const { WSHost } = ENV;
+
+import './play.css';
 
 let selected = [];
 

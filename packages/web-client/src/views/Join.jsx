@@ -8,6 +8,6 @@ const Component = () => {
 
 
 export default {
-  path: "/join",
   element: <Component />,
+  path: "/join",
 };
