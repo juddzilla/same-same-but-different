@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import Account from './views/Account.jsx';
+import Account from './views/Account/Account.jsx';
 import Create from './views/Create/create.jsx';
 import Home from './views/Home.jsx';
 import Join from './views/Join.jsx';

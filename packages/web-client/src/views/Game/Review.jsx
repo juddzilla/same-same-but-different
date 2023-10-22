@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Card from '../../components/Card/Card.jsx';
 import Icon from '../../components/Icons/index.jsx';
+import Pie from '../../components/Pie';
 
 import './review.css';
 
@@ -14,8 +15,6 @@ const possesive = {
   mine: 'Yours',
   theirs: 'Theirs',
 };
-const colors = ['one', 'two', 'three'];
-colors.splice(Math.floor(Math.random()*colors.length), 1);
 
 export default (game) => {
   const [selected, setSelected] = useState(null);
@@ -25,7 +24,7 @@ export default (game) => {
   const month = date.toLocaleString('default', { month: 'long' });
   const start = `${month} ${day}, ${year}`;
 
-  const reviewClassList = ['game-review', `players-${game.players}`];
+  const reviewClassList = ['game-review', 'view-container', `players-${game.players}`];
 
   if (selected) {
     reviewClassList.push(`selected-${selected}`);
@@ -38,7 +37,7 @@ export default (game) => {
 
   return (
       <div className={ reviewClassList.join(' ') }>
-        <div className='game-heading'>
+        <div className='view-heading'>
           <h2>Completed</h2>
           <div className='game-info'>
             <div className='game-date'>{ start }</div>
@@ -50,22 +49,15 @@ export default (game) => {
             {
               Object.keys(players).map((player, index) => {
                 const label = players[player];
-                const outOf = [game.attempts[player].filter(att => att.correct).length, game.attempts[player].length];
-                const percent = (game.attempts[player].filter(att => att.correct).length / game.attempts[player].length) * 100;
                 const scoreClassList = ['player-score', `score-${player}`]
+                const correct = game.attempts[player].filter(att => att.correct).length;
+                const total = game.attempts[player].length;
                 return (
                     <div className={scoreClassList.join(' ')} key={index}>
                       <div className='player-name' onClick={ choosePlayer.bind(null, player) }>
                         { label }
                       </div>
-                      <div className={`pie animate color-${colors[index]}`} style={{ "--p": percent }}>
-                        <div className='score'>
-                          {game.score[player]}pts
-                        </div>
-                        <div className='attempt-ratio'>
-                          {  outOf.join('/') }
-                        </div>
-                      </div>
+                      { Pie({ attempts: [correct, total], index, points: game.score[player] }) }
                     </div>
                 );
               })

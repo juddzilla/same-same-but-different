@@ -9,73 +9,7 @@
     img { transform: scale(3) }
 }
 
-@property --p{
-    syntax: '<number>';
-    inherits: true;
-    initial-value: 0;
-}
-
-.pie {
-    --p:20;
-    --b:22px;
-    --c:var(--color);
-    --w:150px;
-
-    width:var(--w);
-    aspect-ratio:1;
-    position:relative;
-    display:inline-grid;
-    margin:5px;
-    place-content:center;
-    font-size:25px;
-    font-weight:bold;
-    font-family:sans-serif;
-}
-.pie:before,
-.pie:after {
-    content:"";
-    position:absolute;
-    border-radius:50%;
-}
-.pie:before {
-    inset:0;
-    background:
-            radial-gradient(farthest-side,var(--c) 98%,#0000) top/var(--b) var(--b) no-repeat,
-            conic-gradient(var(--c) calc(var(--p)*1%),#0000 0);
-    -webkit-mask:radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));
-    mask:radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));
-}
-.pie:after {
-    inset:calc(50% - var(--b)/2);
-    background:var(--c);
-    transform:rotate(calc(var(--p)*3.6deg)) translateY(calc(50% - var(--w)/2));
-}
-.animate {
-    animation:p 1s .5s both;
-}
-
-@keyframes p {
-    from{--p:0}
-}
-
 .game-review {
-    align-items: center;
-    display: flex;
-    /*flex-wrap: wrap;*/
-    flex-direction: column;
-    height: 100%;
-    min-height: calc(100vh - 200px);
-    position: relative;
-
-    h2 {
-        position: absolute;
-        color: white;
-        font-size: 200px;
-        margin-block-start: 0;
-        margin-block-end: 0;
-        line-height: 1.25;
-    }
-
     h3 {
         font-size: 20px;
     }
@@ -97,13 +31,6 @@
         .attempts-theirs
         { display: none!important; }
      }
-
-    .game-heading {
-        height: 150px;
-        display: flex;
-        justify-content: center;
-        width: 100%;
-    }
 
     .game-info {
         position: relative;
@@ -168,48 +95,6 @@
             margin-block-start: 0;
             margin-block-end: 0;
             line-height: 1;
-        }
-    }
-    .player-scores {
-        display: flex;
-
-        .player-name {
-            padding: 16px;
-            font-size: 30px;
-            font-weight: bold;
-            text-transform: capitalize;
-            transition: transform 90ms linear;
-            z-index: 2;
-
-            cursor: pointer;
-
-            &:hover {
-                transform: scale(1.2);
-             }
-        }
-
-        .player-score {
-            display: flex;
-            align-items: center;
-            transition: transform 180ms linear, opacity 180ms linear;
-
-            &.score-theirs {
-                flex-direction: row-reverse;
-             }
-
-             &:hover {
-                opacity: 1;
-              }
-        }
-
-        .score {
-            font-size: 22px;
-        }
-
-        .attempt-ratio {
-            font-size: 18px;
-            font-weight: 300;
-            text-align: center;
         }
     }
 

@@ -1,0 +1,48 @@
+
+.user-account {
+    position: relative;
+
+    .player-scores {
+        .player-name {
+            cursor: default;
+            &:hover {
+                 transform: scale(1);
+            }
+        }
+    }
+
+    .games {
+        padding-top: 64px;
+        font-size: 24px;
+        width: 720px;
+
+        a {
+            align-items: center;
+            display: flex;
+        }
+
+        .account-game {
+            position: relative;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        .game-id {
+            position: absolute;
+            z-index: -1;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            filter: blur(2px);
+            left: 0;
+        }
+
+        .index {
+            display: inline-block;
+            margin-right: 8px;
+            font-size: 12px
+        }
+    }
+}
