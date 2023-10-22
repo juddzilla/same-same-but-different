@@ -39,7 +39,9 @@ export default ({ id, selected }) => {
           <div className='shapes'>
             {
               [...Array(parseInt(quantity, 10))].map((n, i) => (
-                  Icon(Shape)
+                  <span key={i}>
+                    { Icon(Shape) }
+                  </span>
               ))
             }
           </div>

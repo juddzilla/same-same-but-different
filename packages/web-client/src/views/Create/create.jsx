@@ -8,22 +8,23 @@ import Play from '../../components/Icons/Play.jsx';
 import Two from '../../components/Icons/Two-Square.jsx';
 import User from '../../components/Icons/User.jsx';
 
+import Icon from '../../components/Icons';
+
 import './create.css';
 
 const Create = async (opts) => {
-  console.log('OPTS', opts);
   const game = await API.GamesCreate(opts);
-  console.log('gamr', game);
   return game;
 }
 
-const choicesDefault = { duration: 60, players: 1 };
+const choicesDefault = { discoverable: true, duration: 60, players: 1 };
 const Component = () => {
   const [ state, setState ] = useState(choicesDefault);
   const navigate = useNavigate();
 
-  const setPlayers = (players) => setState({...state, players });
   const onDurationChange = (e) => setState({...state, duration: e.target.value });
+  const setPlayers = (players) => setState({...state, players });
+  const setDiscoverable = (bool) => setState({...state, discoverable: bool });
 
   const create = async () => {
     const req = await Create(state);
@@ -44,7 +45,6 @@ const Component = () => {
               </div>
             </div>
             <div className='game-choice options'>
-
               <div className='option-row players'>
                 <div className='option-key'>Players</div>
                 <span className='option-value'>
@@ -72,6 +72,19 @@ const Component = () => {
                     value={ state.duration }
                 />
               </div>
+
+              { state.players === 2 &&
+                <div className='option-row discoverable-type'>
+                  <span className={`discoverable-option ${state.discoverable ? 'discoverable-selected' : ''}`} onClick={ setDiscoverable.bind(null, true) }>
+                    <div> { Icon('globe') } </div>
+                    <span>Public</span>
+                  </span>
+                  <span className={`discoverable-option ${!state.discoverable ? 'discoverable-selected' : ''}`} onClick={ setDiscoverable.bind(null, false) }>
+                    <div> { Icon('lock') } </div>
+                    <span>Private</span>
+                  </span>
+                </div>
+              }
 
               <div className='actions'>
                 <div className="play" onClick={create}>

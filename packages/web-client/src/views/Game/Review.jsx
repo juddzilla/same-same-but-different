@@ -41,7 +41,6 @@ export default (game) => {
           <h2>Completed</h2>
           <div className='game-info'>
             <div className='game-date'>{ start }</div>
-            <div className='game-duration'>Game Duration: { game.duration } seconds</div>
           </div>
         </div>
         <div className='game-score'>
@@ -71,10 +70,10 @@ export default (game) => {
                   <div className={`player-attempt attempts-${player}`} key={index}>
                     <h4>{ possesive[player] }</h4>
                     <div className='attempts'>
-                      { game.attempts[player].map((attempt, index) => {
+                      { game.attempts[player].map((attempt, idx) => {
                         const attemptClassList = ['attempt', outcomeMap[attempt.correct.toString()]];
                         return (
-                            <div key={index} className={ attemptClassList.join(' ') }>
+                            <div key={idx} className={ attemptClassList.join(' ') }>
                               { attempt.attempt.map((att, i) => {
                                 return (
                                     <div key={i} className='cards'>

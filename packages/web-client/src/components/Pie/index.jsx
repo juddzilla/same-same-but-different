@@ -1,10 +1,8 @@
 import './styles.css';
+const colors = ['one', 'three'];
+// colors.splice(Math.floor(Math.random()*colors.length), 1);
 
 export default ({ attempts, index, points }) => {
-  console.log('{ attempts, index, points }', { attempts, index, points });
-  const colors = ['one', 'two', 'three'];
-  colors.splice(Math.floor(Math.random()*colors.length), 1);
-
   const correct = attempts[0];
   const total = attempts[1];
   const outOf = [correct, total];

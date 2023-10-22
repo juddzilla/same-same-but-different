@@ -10,6 +10,7 @@ import ClientUtils from '../../interfaces/clients-lib';
 import ENV from '../../interfaces/environment';
 import API from '../../interfaces/public-host';
 import Card from '../../components/Card/Card.jsx';
+import Icon from '../../components/Icons';
 
 const { CalcScore, CountAttempts } = ClientUtils.Game.ScoreUtil;
 const { WSHost } = ENV;
@@ -17,6 +18,21 @@ const { WSHost } = ENV;
 import './play.css';
 
 let selected = [];
+
+const copyUrl = async () => {
+  try {
+    await navigator.clipboard.writeText(window.location.href);
+  } catch (err) {
+    console.warn('copy error', window.location.href);
+  }
+}
+
+const displayMap = {
+  completed: 'Doing final calculations',
+  countdown: 'Get Ready',
+  loading: 'Loading',
+  waiting: 'Waiting for Player 2'
+};
 
 const equalsCheck = (a, b) =>
     a.length === b.length &&
@@ -30,20 +46,14 @@ const toggleBodyEffect = (className) => {
     body.classList.remove(className);
   }, 300);
 };
-// get user game
-// get game
-// verify game is not completed
-//
-// if 1p, and user === creator, in itiate game
-// if 2p, and user !== creator, and !player_id, prompt to join
-// once 2 players in room, initiate game
+
 
 const Component = () => {
   const data = useLoaderData();
   const params = useParams();
   const navigate = useNavigate();
-  console.log('data', data);
   const id = params.id;
+
   const Deck = data.deck.split(',').map(val => {
     return {
       display: true,
@@ -58,8 +68,8 @@ const Component = () => {
 
   // game timer
   const [isActive, setIsActive] = useState(false);
-  const [seconds, setSeconds] = useState(data.duration);
-  // const [seconds, setSeconds] = useState(1000000);
+  // const [seconds, setSeconds] = useState(data.duration);  TODO uncoment
+  const [seconds, setSeconds] = useState(1000000);
 
   // game score
   const initialAttempts = [[], null];
@@ -75,7 +85,7 @@ const Component = () => {
     setTimeout(() => {
       navigate(`/game/${id}`);
     }, 2000);
-  }
+  };
 
   useEffect(() => {
     let timer = null;
@@ -107,7 +117,6 @@ const Component = () => {
 
     webSocket.current.onmessage = ({ data }) => {
       const event = JSON.parse(data);
-      console.log('event', event);
 
       if (event.type === 'attempt') {
         const requester = equalsCheck(event.selected, selected);
@@ -135,6 +144,7 @@ const Component = () => {
       }
 
       if (event.type === 'start') {
+        setCards(deselectCards(event.correct));
         setDisplay('countdown');
         setTimeout(function() {
           setDisplay('play');
@@ -191,21 +201,38 @@ const Component = () => {
     setCards([...cards]);
   };
 
-  const displayMap = {
-    completed: 'Doing final calculations',
-    countdown: 'Get Ready',
-    loading: 'Loading',
-    waiting: 'Waiting for Player 2'
-  };
-
   return (
       <>
         <div id='play-view'>
           <div className='play-board'>
-            { display !== 'play' &&
+            { display === 'loading' &&
                 <div className={`pending ${display}`}>
                   <div className='circle'></div>
                   <h1>{ displayMap[display] }</h1>
+                  { display === 'waiting' &&
+                    <div className='copyUrl' onClick={copyUrl}>
+                      <span>Click, Copy,</span>
+                      { Icon('link') }
+                      <span>Share</span>
+                    </div>
+                  }
+                </div>
+            }
+
+            { display === 'waiting' &&
+                <div className={`pending ${display}`}>
+                  <div className='circle'></div>
+                  {
+                    data.discoverable === true ?
+                        (<h1>Wait and link</h1>) :
+                        (<h1> Link only</h1>)
+                  }
+
+                  {/*<div className='copyUrl' onClick={copyUrl}>*/}
+                  {/*  <span>Click, Copy,</span>*/}
+                  {/*  { Icon('link') }*/}
+                  {/*  <span>Share</span>*/}
+                  {/*</div>*/}
                 </div>
             }
 
@@ -218,7 +245,11 @@ const Component = () => {
             }
 
             { display === 'completed' &&
-                <div>Doing final calculations</div>
+                <div className='completed-text'>
+                  <h3>Doing</h3>
+                  <h3>Final</h3>
+                  <h3>Calculations</h3>
+                </div>
             }
           </div>
           {display === 'play' &&

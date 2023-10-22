@@ -5,10 +5,8 @@ const { Values } = ClientUtils.Game.ScoreUtil;
 const { Game } = DB;
 
 export default async ({ id, userId }) => {
-  console.log(999, id);
   try {
     const game = await Game.Find({ publicHash: id });
-    console.log('game', game);
     if (!game || !game.id) {
       return { game: { id: false } };
     }
@@ -16,8 +14,6 @@ export default async ({ id, userId }) => {
     if (game.players === 1 && game.userId !== userId) {
       console.log('redirect');
     }
-
-    console.log('user', userId);
 
     const attempts = game.attempts.filter(Boolean);
 
@@ -39,8 +35,8 @@ export default async ({ id, userId }) => {
     game.attempts = a;
     game.score = s;
 
-    delete game.playerId;
-    delete game.userId;
+    // delete game.playerId;
+    // delete game.userId;
 
     return game;
   } catch (error) {

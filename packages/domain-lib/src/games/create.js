@@ -5,11 +5,12 @@ import NewDeck from '../deck/create';
 
 const { GameDecks, Games } = DB;
 
-export default async ({ duration, players, userId }) => {
+export default async ({ discoverable, duration, players, userId }) => {
   try {
     const publicHash = nanoid();
 
     const opts = {
+      discoverable,
       duration,
       players,
       publicHash,

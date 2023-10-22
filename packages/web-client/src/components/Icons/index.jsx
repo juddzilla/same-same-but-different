@@ -2,7 +2,6 @@ import svgs from './svgs';
 import './svgs.css';
 
 export default (name) => {
-  console.log('name', name);
   const icon = !Object.hasOwn(svgs, name) ? 'warning' : name;
   const iconClassList = ['Icon', name];
   return (

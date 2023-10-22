@@ -5,6 +5,7 @@ export default async ({ publicHash }) => {
     SELECT
       games.completed_at,
       games.duration,
+      games.discoverable,
       games.player_id,
       games.players,
       games.public_hash as id,

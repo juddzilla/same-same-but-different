@@ -4,6 +4,7 @@ import Domain from './interfaces/domain';
 const { websocketPort } = ENV;
 
 const Rooms = {};
+const Joining = [];
 
 const parseCookie = str =>
   str
@@ -42,9 +43,21 @@ function broadcastToRoom(room, data) {
 }
 
 wss.on('connection', async function connection(ws, request) {
-  console.log('connection');
+  // console.log('connection');
   const cookies = parseCookie(request.headers.cookie);
   const userId = await Domain.Auth.CookieUser(cookies);
+
+  if (request.url === '/join') {
+    console.log('JOIN', request.url, userId);
+    Joining.push(userId);
+
+    // Rooms[publicHash] = {
+    //   connections: [],
+    //   players: Game.players,
+    //   users: [],
+    // };
+  }
+  // return;
   const publicHash = request.url.replace(/\//g, "");
 
   // verify user and game public hash
@@ -52,7 +65,7 @@ wss.on('connection', async function connection(ws, request) {
     ws.close(1000, JSON.stringify({type: 'error', code: 400}));
   }
 
-  const Game = await Domain.Games.Find({publicHash});
+  const Game = await Domain.Games.Play({ id: publicHash });
 
   // verify game exists
   if (!Game || !Object.hasOwn(Game, 'id')) {
@@ -91,7 +104,17 @@ wss.on('connection', async function connection(ws, request) {
   // send update to UI
   setTimeout(function() {
     const type = Rooms[publicHash].users.length === Rooms[publicHash].players ? 'start' : 'waiting';
+    const correct = Object.keys(Game.attempts).reduce((acc, cur) => {
+
+      for (let j = 0; j < Game.attempts[cur].length; j++) {
+        if (Game.attempts[cur][j].correct) {
+          acc = [...acc, ...Game.attempts[cur][j].attempt]
+        }
+      }
+      return acc;
+    }, []);
     const data = {
+      correct,
       gameId: publicHash,
       type,
     };
@@ -119,11 +142,11 @@ wss.on('connection', async function connection(ws, request) {
       Rooms[publicHash].connections.splice(connectionIndex, 1);
       Rooms[publicHash].users.splice(userIndex, 1);
 
-      // if (!Rooms[publicHash].users.length) {
-      //   Rooms[publicHash].connections.forEach(connection => connection.close(1000, JSON.stringify({ type: 'completed', id: publicHash })));
-      //   await Domain.Game.Complete({ publicHash });
-      //   delete Rooms[publicHash];
-      // }
+      if (!Rooms[publicHash].users.length) {
+        Rooms[publicHash].connections.forEach(connection => connection.close(1000, JSON.stringify({ type: 'completed', id: publicHash })));
+        await Domain.Game.Complete({ publicHash });
+        delete Rooms[publicHash];
+      }
     }
   });
 

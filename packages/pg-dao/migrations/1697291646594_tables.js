@@ -53,6 +53,7 @@ const tables = {
         default: 1,
       },
       player_id: { type: 'integer' },
+      public: { type: 'boolean', default: true },
       public_hash: { notNull: true, type: 'text' },
       started_at: { type: 'timestamptz' },
       completed_at: { type: 'timestamptz' },

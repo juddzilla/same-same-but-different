@@ -48,8 +48,10 @@ const Component = () => {
                     <span className='game-id'>{ game.id } </span>
                     <Link to={`/game/${game.id}`}>
                       <span className='index'>{ index + 1 }</span>
-                      { ClientUtils.Utils.Date(game.completedAt) } -
-                      { game.players } Player Game -
+                      { ClientUtils.Utils.Date(game.completedAt) }
+                      <span className='divider'>|</span>
+                      { game.players } Player Game
+                      <span className='divider'>|</span>
                       { game.duration }s
                     </Link>
                   </div>
@@ -58,7 +60,7 @@ const Component = () => {
           </div>
         </div>
       </div>
-  )
+  );
 };
 
 export default {

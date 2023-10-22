@@ -24,10 +24,11 @@ export default {
   schema: {
     body: {
       properties: {
+        discoverable: { type: 'boolean' },
         duration: { type: 'integer' },
         players: { type: 'integer' },
       },
-      required: ['duration', 'players'],
+      required: ['discoverable', 'duration', 'players'],
       type: 'object',
     },
   },
