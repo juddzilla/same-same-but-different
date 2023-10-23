@@ -48,7 +48,7 @@ export default (game) => {
             {
               Object.keys(players).map((player, index) => {
                 const label = players[player];
-                const scoreClassList = ['player-score', `score-${player}`]
+                const scoreClassList = ['player-score', `score-${index}`]
                 const correct = game.attempts[player].filter(att => att.correct).length;
                 const total = game.attempts[player].length;
                 return (

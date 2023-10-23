@@ -11,6 +11,7 @@ import ENV from '../../interfaces/environment';
 import API from '../../interfaces/public-host';
 import Card from '../../components/Card/Card.jsx';
 import Icon from '../../components/Icons';
+import Pie from '../../components/Pie';
 
 const { CalcScore, CountAttempts } = ClientUtils.Game.ScoreUtil;
 const { WSHost } = ENV;
@@ -38,6 +39,11 @@ const equalsCheck = (a, b) =>
     a.length === b.length &&
     a.every((e) => b.includes(e));
 
+const players = {
+  0: 'You',
+  1: 'Them',
+};
+
 const toggleBodyEffect = (className) => {
   const body = document.body;
   body.classList.add(className);
@@ -46,7 +52,6 @@ const toggleBodyEffect = (className) => {
     body.classList.remove(className);
   }, 300);
 };
-
 
 const Component = () => {
   const data = useLoaderData();
@@ -68,8 +73,8 @@ const Component = () => {
 
   // game timer
   const [isActive, setIsActive] = useState(false);
-  // const [seconds, setSeconds] = useState(data.duration);  TODO uncoment
-  const [seconds, setSeconds] = useState(1000000);
+  // const [seconds, setSeconds] = useState(data.duration);  // TODO uncoment
+  const [seconds, setSeconds] = useState(1000);
 
   // game score
   const initialAttempts = [[], null];
@@ -149,7 +154,7 @@ const Component = () => {
         setTimeout(function() {
           setDisplay('play');
           setIsActive(true);
-        }, 3000);
+        }, 2000);
       }
 
       if (event.type === 'waiting') {
@@ -201,38 +206,56 @@ const Component = () => {
     setCards([...cards]);
   };
 
+  const playClassList = ['view-container', `players-${data.players}`, `show-${display}`];
+
   return (
       <>
-        <div id='play-view'>
+        <div id='play-view' className={ playClassList.join(' ')}>
+          <div className='view-heading'>
+            <h2>Play</h2>
+          </div>
+          <div className='game-score'>
+            <div className='player-scores'>
+              {
+                [...Array(data.players)].map((player, index) => {
+                  const label = players[index];
+                  const scoreClassList = ['player-score', `score-${index}`]
+                  const correct = CountAttempts(attempts[index], true);
+                  const points = CalcScore(attempts[index]);
+                  const total = CountAttempts(attempts[index]);
+                  return (
+                      <>
+                        <div className={scoreClassList.join(' ')} key={index}>
+                          <div className='player-name'>
+                            { label }
+                          </div>
+                          { Pie({ attempts: [correct, total], index, points }) }
+                        </div>
+                        { index === 0 &&
+                        <div className='time'>
+                          { seconds }
+                        </div>
+                        }
+                      </>
+                  );
+                })
+              }
+            </div>
+          </div>
           <div className='play-board'>
-            { display === 'loading' &&
+            { ['countdown', 'loading', 'waiting' ].includes(display) &&
                 <div className={`pending ${display}`}>
-                  <div className='circle'></div>
-                  <h1>{ displayMap[display] }</h1>
+                  <div className='pending-container'>
+                    <div className='circle'></div>
+                    <h1>{ displayMap[display] }</h1>
+                  </div>
                   { display === 'waiting' &&
-                    <div className='copyUrl' onClick={copyUrl}>
-                      <span>Click, Copy,</span>
-                      { Icon('link') }
-                      <span>Share</span>
-                    </div>
+                      <div className='copyUrl' onClick={copyUrl}>
+                        <span>Click, Copy,</span>
+                        { Icon('link') }
+                        <span>Share</span>
+                      </div>
                   }
-                </div>
-            }
-
-            { display === 'waiting' &&
-                <div className={`pending ${display}`}>
-                  <div className='circle'></div>
-                  {
-                    data.discoverable === true ?
-                        (<h1>Wait and link</h1>) :
-                        (<h1> Link only</h1>)
-                  }
-
-                  {/*<div className='copyUrl' onClick={copyUrl}>*/}
-                  {/*  <span>Click, Copy,</span>*/}
-                  {/*  { Icon('link') }*/}
-                  {/*  <span>Share</span>*/}
-                  {/*</div>*/}
                 </div>
             }
 
@@ -252,47 +275,6 @@ const Component = () => {
                 </div>
             }
           </div>
-          {display === 'play' &&
-              <div className='play-footer'>
-                <div className='play-footer-content'>
-
-                  <table className='score-board'>
-                    <thead>
-                    <tr>
-                      <th></th>
-                      <th className='stat-cats'>FGM</th>
-                      <th className='stat-cats'>FGA</th>
-                      <th className='stat-cats'>Points</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr className='stat-line'>
-                      <td>You</td>
-                      <td>{ CountAttempts(attempts[0], true) }</td>
-                      <td>{ CountAttempts(attempts[0]) }</td>
-                      <td>{ CalcScore(attempts[0]) } </td>
-
-                    </tr>
-                    { data.players === 2 &&
-                      <tr>
-                        <td>Them</td>
-                        <td>{ CountAttempts(attempts[1], true) }</td>
-                        <td>{ CountAttempts(attempts[1]) }</td>
-                        <td>{ CalcScore(attempts[1]) } </td>
-                      </tr>
-                    }
-                    </tbody>
-                  </table>
-                  <div className='time'>
-                    { seconds }
-                  </div>
-                  <div className='actions'>
-                    <button>Concede</button>
-                  </div>
-                </div>
-              </div>
-          }
-
         </div>
       </>
   )

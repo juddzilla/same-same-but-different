@@ -6,6 +6,14 @@
     height: 100%;
     min-height: calc(100vh - 200px);
     position: relative;
+
+    &.players-1 {
+        .score-0 .player-name,
+        .score-1,
+        .player-attempt h4,
+        .attempts-theirs
+        { display: none!important; }
+    }
 }
 
 .view-heading {
@@ -48,7 +56,7 @@
     align-items: center;
     transition: transform 180ms linear, opacity 180ms linear;
 
-    &.score-theirs {
+    &.score-1 {
          flex-direction: row-reverse;
      }
 
@@ -65,5 +73,20 @@
         font-size: 18px;
         font-weight: 300;
         text-align: center;
+    }
+}
+
+.default-view {
+    h1 {
+        position: relative;
+    }
+    h2 {
+        font-size: 64px;
+        /*margin-top: 33vh;*/
+        text-align: center;
+    }
+
+    .view-content {
+        padding: 16px 0;
     }
 }

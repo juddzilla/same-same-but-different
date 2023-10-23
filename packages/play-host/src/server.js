@@ -4,7 +4,8 @@ import Domain from './interfaces/domain';
 const { websocketPort } = ENV;
 
 const Rooms = {};
-const Joining = [];
+const WaitingForGame = [];
+const WaitingFor2P = [];
 
 const parseCookie = str =>
   str
@@ -14,6 +15,11 @@ const parseCookie = str =>
       acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
       return acc;
     }, {});
+
+function removeFromWaitingFor2P(id) {
+  const waitingIndex = WaitingFor2P.indexOf(id);
+  WaitingFor2P.splice(waitingIndex, 1);
+}
 
 const wss = new WebSocketServer({
   port: websocketPort,
@@ -47,22 +53,28 @@ wss.on('connection', async function connection(ws, request) {
   const cookies = parseCookie(request.headers.cookie);
   const userId = await Domain.Auth.CookieUser(cookies);
 
-  if (request.url === '/join') {
-    console.log('JOIN', request.url, userId);
-    Joining.push(userId);
-
-    // Rooms[publicHash] = {
-    //   connections: [],
-    //   players: Game.players,
-    //   users: [],
-    // };
+  if (!userId) {
+    ws.close(1000, JSON.stringify({type: 'error', code: 400}));
   }
-  // return;
+
+  if (request.url === '/join') {
+    if (WaitingFor2P.length) {
+      ws.send(JSON.stringify({ type: 'join', id: WaitingFor2P.shift() }));
+    } else {
+      WaitingForGame.push(ws);
+
+      ws.on('close', async function() {
+        const wsIndex = WaitingForGame.indexOf(ws);
+        WaitingForGame.splice(wsIndex, 1);
+      });
+    }
+    return;
+  }
   const publicHash = request.url.replace(/\//g, "");
 
   // verify user and game public hash
-  if (!userId || !publicHash) {
-    ws.close(1000, JSON.stringify({type: 'error', code: 400}));
+  if (!publicHash) {
+    ws.close(1000, JSON.stringify({type: 'error', code: 404}));
   }
 
   const Game = await Domain.Games.Play({ id: publicHash });
@@ -74,13 +86,8 @@ wss.on('connection', async function connection(ws, request) {
 
   // authorized
   if (Game.players === 1 && userId !== Game.userId) {
+    // if 1P and user is not game creator
     ws.close(1000, JSON.stringify({ type: 'error', code: 401 }));
-  } else if (Game.players === 2 && Game.userId !== userId) {
-    if (Game.playerId === null) {
-      await Domain.Games.Update({ publicHash, playerId: userId });
-    } else if (Game.playerId !== userId) {
-      ws.close(1000, JSON.stringify({ type: 'error', code: 401 }));
-    }
   }
 
   // create room is not exist
@@ -100,12 +107,39 @@ wss.on('connection', async function connection(ws, request) {
   // push connection
   Rooms[publicHash].connections.push(ws);
 
+  
+  if (Game.players === 2 &&
+      Rooms[publicHash].users[0] === userId &&
+      Rooms[publicHash].users.length === 1 &&
+      Game.discoverable
+  ) {
+    if (WaitingForGame.length) {
+    // if game discoverable === true
+      
+      const joiner = WaitingForGame.shift();
+      joiner.send(JSON.stringify({ type: 'join', id: publicHash }));
+    } else {
+      WaitingFor2P.push(publicHash);
+    }
+  }
+
+  if (Game.players === 2 && Game.userId !== userId) {
+    // if 2P
+    if (Game.playerId === null) {
+      // if no 2nd player associated
+      removeFromWaitingFor2P(ws);
+      await Domain.Games.Update({ publicHash, playerId: userId });
+    } else if (Game.playerId !== userId) {
+      // if user is not associated 2nd player
+      ws.close(1000, JSON.stringify({ type: 'error', code: 401 }));
+    }
+  }
+
 
   // send update to UI
   setTimeout(function() {
     const type = Rooms[publicHash].users.length === Rooms[publicHash].players ? 'start' : 'waiting';
     const correct = Object.keys(Game.attempts).reduce((acc, cur) => {
-
       for (let j = 0; j < Game.attempts[cur].length; j++) {
         if (Game.attempts[cur][j].correct) {
           acc = [...acc, ...Game.attempts[cur][j].attempt]
@@ -142,11 +176,15 @@ wss.on('connection', async function connection(ws, request) {
       Rooms[publicHash].connections.splice(connectionIndex, 1);
       Rooms[publicHash].users.splice(userIndex, 1);
 
-      if (!Rooms[publicHash].users.length) {
-        Rooms[publicHash].connections.forEach(connection => connection.close(1000, JSON.stringify({ type: 'completed', id: publicHash })));
-        await Domain.Game.Complete({ publicHash });
-        delete Rooms[publicHash];
-      }
+      // if (!Rooms[publicHash].users.length) {
+      //   Rooms[publicHash].connections.forEach(connection => connection.close(1000, JSON.stringify({ type: 'completed', id: publicHash })));
+      //   await Domain.Game.Complete({ publicHash });
+      //   delete Rooms[publicHash];
+      // }
+    }
+
+    if (WaitingFor2P.includes(publicHash)) {
+      removeFromWaitingFor2P(publicHash);
     }
   });
 

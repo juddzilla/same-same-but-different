@@ -16,21 +16,13 @@
 
     &.selected-mine {
         .attempts-theirs { display: none }
-        .score-theirs { transform: scale(0.8); opacity: 0.7; }
+        .score-1 { transform: scale(0.8); opacity: 0.7; }
     }
 
     &.selected-theirs {
         .attempts-mine { display: none }
-        .score-mine { transform: scale(0.8); opacity: 0.7; }
+        .score-0 { transform: scale(0.8); opacity: 0.7; }
     }
-
-    &.players-1 {
-        .score-mine .player-name,
-        .score-theirs,
-        .player-attempt h4,
-        .attempts-theirs
-        { display: none!important; }
-     }
 
     .game-info {
         position: relative;
@@ -52,6 +44,7 @@
         align-items: center;
         display: flex;
         font-size: 20px;
+        margin-top: 64px;
     }
 
     .play-card {

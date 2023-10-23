@@ -2,13 +2,17 @@ import React from 'react';
 import { Link, Outlet } from "react-router-dom";
 import Icon from './components/Icons/index.jsx';
 
-import './styles/common.css';
-
-const links = [
+const header = [
   { display: 'Home', to: '/' },
   { display: 'Play', to: '/play' },
   { display: 'Rules', to: '/rules' },
   { display: 'Join', to: '/join' }
+];
+
+const footer = [
+  { display: 'Privacy', to: '/privacy' },
+  { display: 'Terms', to: '/terms' },
+  { display: 'Contact', to: '/contact' },
 ];
 
 export default () => {
@@ -16,7 +20,7 @@ export default () => {
     <>
       <header>
         <div className='header-container'>
-          { links.map((link, index) => (
+          { header.map((link, index) => (
               <Link to={ link.to } key={index}>{ link.display }</Link>
           ))}
           <div className='account'>
@@ -27,6 +31,12 @@ export default () => {
         </div>
       </header>
       <Outlet />
+      <footer>
+        { footer.map((link, index) => (
+            <Link to={ link.to } key={index}>{ link.display }</Link>
+        ))}
+        <span>Judd Hendrix</span>
+      </footer>
     </>
   )
 }

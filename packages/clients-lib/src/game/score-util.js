@@ -1,4 +1,7 @@
 const CalcScore = (atts) => {
+  if (!atts) {
+    return 0;
+  }
   return atts.reduce((acc, cur) => {
     const val = cur.correct ? 10 : -5;
     acc += val;
@@ -7,6 +10,9 @@ const CalcScore = (atts) => {
 };
 
 const CountAttempts = (atts, value) => {
+  if (!atts) {
+    return 0;
+  }
   if (!value) {
     return atts.length;
   }
