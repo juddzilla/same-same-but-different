@@ -18,7 +18,6 @@ export default (initialValue) => {
     return [
       value,
       (v) => {
-      console.log('v', v);
         subscribers.notify(v);
       },
     ];

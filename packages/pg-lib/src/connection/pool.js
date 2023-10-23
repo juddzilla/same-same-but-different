@@ -7,6 +7,7 @@ export default class ConnectionPool {
   }
 
   async Query(statement) {
+    // console.log('statement', statement);
     try {
       const results = await this.instance.query(statement);
       return results.rows;

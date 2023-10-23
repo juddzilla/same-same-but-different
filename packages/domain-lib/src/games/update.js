@@ -7,6 +7,6 @@ export default async ({ publicHash, ...rest }) => {
     condition: { publicHash },
     values: { ...rest },
   });
-  console.log('game', game);
+
   return game;
 };

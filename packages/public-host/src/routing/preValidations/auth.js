@@ -5,7 +5,7 @@ const { serverCookieName, serverCookieDomain } = ENV;
 const auth = async (req, res) => {
   try {
     let user = await Domain.Auth.CookieUser(req.cookies);
-    console.log('USEr', user);
+
     if (!user) {
       // create anonymous user
       // if they register, user will be updated

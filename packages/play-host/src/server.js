@@ -45,7 +45,10 @@ const wss = new WebSocketServer({
 });
 
 function broadcastToRoom(room, data) {
-  Rooms[room].connections.forEach(connection => connection.send(JSON.stringify(data)));
+  console.log('Rooms', Rooms);
+  if (Object.hasOwn(Rooms, room)) {
+    Rooms[room].connections.forEach(connection => connection.send(JSON.stringify(data)));
+  }
 }
 
 wss.on('connection', async function connection(ws, request) {
@@ -58,12 +61,15 @@ wss.on('connection', async function connection(ws, request) {
   }
 
   if (request.url === '/join') {
+    // if existing games waiting for 2nd player
     if (WaitingFor2P.length) {
       ws.send(JSON.stringify({ type: 'join', id: WaitingFor2P.shift() }));
     } else {
+      // ass connection to waiting for game
       WaitingForGame.push(ws);
 
       ws.on('close', async function() {
+        // remove from waiting for game on socket close
         const wsIndex = WaitingForGame.indexOf(ws);
         WaitingForGame.splice(wsIndex, 1);
       });
@@ -77,7 +83,7 @@ wss.on('connection', async function connection(ws, request) {
     ws.close(1000, JSON.stringify({type: 'error', code: 404}));
   }
 
-  const Game = await Domain.Games.Play({ id: publicHash });
+  const Game = await Domain.Games.Play({ id: publicHash, userId });
 
   // verify game exists
   if (!Game || !Object.hasOwn(Game, 'id')) {
@@ -107,7 +113,6 @@ wss.on('connection', async function connection(ws, request) {
   // push connection
   Rooms[publicHash].connections.push(ws);
 
-  
   if (Game.players === 2 &&
       Rooms[publicHash].users[0] === userId &&
       Rooms[publicHash].users.length === 1 &&
@@ -138,29 +143,41 @@ wss.on('connection', async function connection(ws, request) {
 
   // send update to UI
   setTimeout(function() {
+    const startedAt = Game.startedAt || new Date().toISOString();
     const type = Rooms[publicHash].users.length === Rooms[publicHash].players ? 'start' : 'waiting';
-    const correct = Object.keys(Game.attempts).reduce((acc, cur) => {
-      for (let j = 0; j < Game.attempts[cur].length; j++) {
-        if (Game.attempts[cur][j].correct) {
-          acc = [...acc, ...Game.attempts[cur][j].attempt]
+    let correct = [];
+    if (Game.attempts) {
+      correct = Object.keys(Game.attempts).reduce((acc, cur) => {
+        for (let j = 0; j < Game.attempts[cur].length; j++) {
+          if (Game.attempts[cur][j].correct) {
+            acc = [...acc, ...Game.attempts[cur][j].attempt]
+          }
         }
-      }
-      return acc;
-    }, []);
+        return acc;
+      }, []);
+    }
     const data = {
       correct,
       gameId: publicHash,
+      startedAt,
       type,
     };
+
     broadcastToRoom(publicHash, data);
 
     if (type === 'start') {
       if (Game.startedAt === null) {
-        Domain.Game.Start({ publicHash });
+        Domain.Games.Update({ publicHash, startedAt });
       }
 
       setTimeout(function() {
         Domain.Game.Complete({ publicHash });
+        const response = {
+          gameId: publicHash,
+          type: 'complete',
+        };
+
+        broadcastToRoom(response.gameId, response);
       }, Game.duration * 1000)
     }
 

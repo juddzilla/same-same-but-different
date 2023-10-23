@@ -7,7 +7,6 @@ let WS = 'ws://localhost:2018';
 
 const args = process.argv.slice(2, process.argv.length);
 const mode = args.filter(v => v.includes('mode'))[0];
-console.log('args', args);
 
 if (mode) {
   const value = mode.split('=')[1];
@@ -30,7 +29,6 @@ const htmlPluginOpt = {
   ]
 };
 
-console.log('process', process.argv);
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [

@@ -55,6 +55,7 @@ const toggleBodyEffect = (className) => {
 
 const Component = () => {
   const data = useLoaderData();
+  const duration = data.duration;
   const params = useParams();
   const navigate = useNavigate();
   const id = params.id;
@@ -73,8 +74,7 @@ const Component = () => {
 
   // game timer
   const [isActive, setIsActive] = useState(false);
-  // const [seconds, setSeconds] = useState(data.duration);  // TODO uncoment
-  const [seconds, setSeconds] = useState(1000);
+  const [seconds, setSeconds] = useState(0);
 
   // game score
   const initialAttempts = [[], null];
@@ -149,6 +149,13 @@ const Component = () => {
       }
 
       if (event.type === 'start') {
+        const gameStart = parseInt((new Date(event.startedAt).getTime() / 1000).toFixed(0));
+        const willEndAt = gameStart + duration;
+        const now = parseInt((new Date().getTime() / 1000).toFixed(0));
+
+        const setTimerTo = willEndAt - now;
+        setSeconds(setTimerTo);
+
         setCards(deselectCards(event.correct));
         setDisplay('countdown');
         setTimeout(function() {
@@ -158,6 +165,10 @@ const Component = () => {
       }
 
       if (event.type === 'waiting') {
+        setDisplay('waiting');
+      }
+
+      if (event.type === 'complete') {
         setDisplay('waiting');
       }
     };

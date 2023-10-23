@@ -27,7 +27,6 @@ export default class {
     this.connection = new WebSocket(`${url}/${id}`);
 
     this.connection.addEventListener("open", (event) => {
-      console.log('opened');
       // this.connection.send(JSON.stringify({ game: { id }}));
     });
 

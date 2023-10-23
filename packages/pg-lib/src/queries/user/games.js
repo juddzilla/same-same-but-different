@@ -33,31 +33,3 @@ export default async ({ userId }) => {
     return { error: 'Find Error' };
   }
 };
-
-// import Database from '../../connection/instance';
-//
-// export default async ({ userId }) => {
-//   const statement = `
-//     SELECT
-//       games.completed_at,
-//       games.duration,
-//       games.id,
-//       games.players,
-//       games.public_hash,
-//       games.started_at,
-//       games.user_id
-//     FROM
-//       games
-//     WHERE
-//         (games.started_at IS NOT NULL and games.completed_at IS NOT NULL)
-//     AND (games.user_id = '${userId}' OR games.player_id = '${userId}')
-//     ;
-//   `;
-// console.log('statement',statement);
-//   try {
-//     const results = await Database.getInstance().Query(statement);
-//     return results;
-//   } catch (e) {
-//     return { error: 'Find Error' };
-//   }
-// };
