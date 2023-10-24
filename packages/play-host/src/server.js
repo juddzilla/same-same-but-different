@@ -170,15 +170,15 @@ wss.on('connection', async function connection(ws, request) {
         Domain.Games.Update({ publicHash, startedAt });
       }
 
-      setTimeout(function() {
-        Domain.Game.Complete({ publicHash });
-        const response = {
-          gameId: publicHash,
-          type: 'complete',
-        };
-
-        broadcastToRoom(response.gameId, response);
-      }, Game.duration * 1000)
+      // setTimeout(function() {
+      //   Domain.Game.Complete({ publicHash });
+      //   const response = {
+      //     gameId: publicHash,
+      //     type: 'complete',
+      //   };
+      //
+      //   broadcastToRoom(response.gameId, response);
+      // }, Game.duration * 1000);
     }
 
   }, 1200);
@@ -193,11 +193,6 @@ wss.on('connection', async function connection(ws, request) {
       Rooms[publicHash].connections.splice(connectionIndex, 1);
       Rooms[publicHash].users.splice(userIndex, 1);
 
-      // if (!Rooms[publicHash].users.length) {
-      //   Rooms[publicHash].connections.forEach(connection => connection.close(1000, JSON.stringify({ type: 'completed', id: publicHash })));
-      //   await Domain.Game.Complete({ publicHash });
-      //   delete Rooms[publicHash];
-      // }
     }
 
     if (WaitingFor2P.includes(publicHash)) {

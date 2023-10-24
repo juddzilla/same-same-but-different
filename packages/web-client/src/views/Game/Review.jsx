@@ -38,7 +38,7 @@ export default (game) => {
   return (
       <div className={ reviewClassList.join(' ') }>
         <div className='view-heading'>
-          <h2>Completed</h2>
+          <h1 className='headline'>Review</h1>
           <div className='game-info'>
             <div className='game-date'>{ start }</div>
           </div>

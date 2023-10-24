@@ -1,3 +1,5 @@
+@import '../../styles/breakpoints.css';
+
 .game-not-found {
     align-items: center;
     display: flex;
@@ -24,15 +26,31 @@
         .score-0 { transform: scale(0.8); opacity: 0.7; }
     }
 
+    .game-attempts {
+        padding-bottom: 32px;
+        position: relative;
+        top: -16px;
+
+        @mixin breakpoint-up medium {
+            left: 24px;
+        }
+    }
+
     .game-info {
         position: relative;
-        height: 250px;
-        padding-top: 64px;
         font-size: 20px;
-        width: 720px;
+        position: relative;
+        top: -12px;
+        left: -11px;
+
+        @mixin breakpoint-up medium {
+            left: 0;
+            top: -18px;
+        }
 
         .game-date {
             font-weight: bold;
+            padding-left: 18px;
         }
 
         .game-duration {
@@ -40,11 +58,19 @@
             margin-top: 0;
         }
     }
+
     .game-score {
         align-items: center;
         display: flex;
         font-size: 20px;
-        margin-top: 64px;
+        justify-content: center;
+        padding-top: 16px;
+        width: 100%;
+        margin-bottom: 32px;
+
+        @mixin breakpoint-up medium {
+            margin-bottom: 16px;
+        }
     }
 
     .play-card {
@@ -53,68 +79,128 @@
 
 
 
-    .outcome {
-        margin-right: 8px;
-
-        .Icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            path {
-                /*stroke: white;*/
-                stroke-width: 2.5;
-            }
-
-            svg {
-                transform: scale(0.6) translateY(-9px) translateX(10px);
-                filter: drop-shadow(0px 0px 16px rgb(0 0 0 / 0.4));
-                z-index: -1;
-            }
-        }
+    .player-attempts {
+        max-width: 100vw;
     }
 
     .player-attempt .attempts {
-        padding-left: 108px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .player-attempt { padding-top: 16px; }
     .player-attempt {
-        padding: 64px 0 32px;
         position: relative;
+        margin-bottom: 32px;
+
+        @mixin breakpoint-up medium {
+            padding-top: 64px;
+        }
 
         h4 {
             font-size: 48px;
-            position: absolute;
-            top: 6px;
-            left: 32px;
-            z-index: -1;
-            margin-block-start: 0;
-            margin-block-end: 0;
             line-height: 1;
-            text-shadow: 2px 2px 38px rgb(0 0 0 / 0.4);
+            text-align: center;
+
+            @mixin breakpoint-up medium {
+                position: absolute;
+                top: 6px;
+                left: 32px;
+                margin-bottom: 0;
+                z-index: -1;
+                text-shadow: 2px 2px 38px rgb(0 0 0 / 0.4);
+            }
+
+            @mixin breakpoint-up large {
+                left: -32px;
+            }
+
+
         }
     }
 
     .game-attempts {
-        transform: translateX(-36px);
         .attempt {
             align-items: center;
             display: flex;
             margin-bottom: 16px;
+            position: relative;
 
-            /*&.incorrect .cards .border { border-color: var(--off-black); }*/
+            @mixin breakpoint-down medium {
+                transform: scale(0.8);
+                margin-bottom: 8px;
+            }
+
+            @mixin breakpoint-down small {
+                transform: scale(0.45) translateX(-36px);
+                margin-bottom: -40px;
+                margin-left: 30px;
+            }
+
+
+            .outcome {
+                align-items: center;
+                display: flex;
+                margin-right: 8px;
+                width: 64px;
+
+                @mixin breakpoint-down small {
+
+                    left: -44px;
+                    position: absolute;
+                    top: -32px;
+                    transform: scale(1.4);
+                    z-index: -1;
+                }
+
+                .Icon {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    path {
+                        /*stroke: white;*/
+                        stroke-width: 2.5;
+                    }
+
+                    svg {
+                        transform: scale(0.6) translateY(-9px) translateX(10px);
+                        filter: drop-shadow(0px 0px 16px rgb(0 0 0 / 0.4));
+                        z-index: -1;
+                    }
+                }
+            }
+
         }
         .cards {
             display: flex;
         }
-        .outcome {
-            width: 64px;
-            display: flex;
-            align-items: center;
-        }
+
         .play-card .border {
             border-width: 0;
+        }
+    }
+
+    .view-heading {
+        height: unset;
+        max-width: 330px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+
+        @mixin breakpoint-up medium {
+            justify-content: flex-end;
+            margin-bottom: -64px;
+            max-width: unset;
+        }
+
+        h1 {
+            line-height: 1;
+            @mixin breakpoint-up medium {
+                font-size: 24vw;
+                line-height: 0.75;
+            }
         }
     }
 }

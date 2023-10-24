@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import API from '../../interfaces/public-host.js';
 
 import One from '../../components/Icons/One-Square.jsx';
-import Play from '../../components/Icons/Play.jsx';
 import Two from '../../components/Icons/Two-Square.jsx';
 import User from '../../components/Icons/User.jsx';
 
@@ -15,7 +14,12 @@ import './create.css';
 const Create = async (opts) => {
   const game = await API.GamesCreate(opts);
   return game;
-}
+};
+
+const discoverableMessage = {
+  true: 'Anyone can join',
+  false: 'Only players with link can join'
+};
 
 const choicesDefault = { discoverable: true, duration: 60, players: 1 };
 const Component = () => {
@@ -33,8 +37,8 @@ const Component = () => {
 
   return (
       <>
-        <div className='games'>
-          <h1>Create</h1>
+        <div className='create-view'>
+          <h1 className='headline'>Create</h1>
           <div className={`game-choices ${ state.players === 1 ? 'P1' : 'P2'}`}>
             <div className='game-choice player-icons'>
               <div className='user-icon user-1'>
@@ -74,22 +78,26 @@ const Component = () => {
               </div>
 
               { state.players === 2 &&
-                <div className='option-row discoverable-type'>
-                  <span className={`discoverable-option ${state.discoverable ? 'discoverable-selected' : ''}`} onClick={ setDiscoverable.bind(null, true) }>
-                    <div> { Icon('globe') } </div>
-                    <span>Public</span>
-                  </span>
-                  <span className={`discoverable-option ${!state.discoverable ? 'discoverable-selected' : ''}`} onClick={ setDiscoverable.bind(null, false) }>
-                    <div> { Icon('lock') } </div>
-                    <span>Private</span>
-                  </span>
-                </div>
+                  <>
+                  <div className='option-row discoverable-type'>
+                    <span className={`discoverable-option ${state.discoverable ? 'discoverable-selected' : ''}`} onClick={ setDiscoverable.bind(null, true) }>
+                      <div> { Icon('globe') } </div>
+                      <span>Public</span>
+                    </span>
+                    <span className={`discoverable-option ${!state.discoverable ? 'discoverable-selected' : ''}`} onClick={ setDiscoverable.bind(null, false) }>
+                      <div> { Icon('lock') } </div>
+                      <span>Private</span>
+                    </span>
+                  </div>
+                  <div className='option-row discoverable-message'>
+                    { discoverableMessage[state.discoverable] }
+                  </div>
+                  </>
               }
 
               <div className='actions'>
                 <div className="play" onClick={create}>
                   <span>PLAY</span>
-                  <Play />
                 </div>
               </div>
             </div>

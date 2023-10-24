@@ -1,0 +1,40 @@
+.home-view {
+
+    a { font-size: 64px; }
+
+    .home-link {
+        display: flex;
+        height: 150px;
+        justify-content: center;
+        position: relative;
+
+        .Icon {
+            position: absolute;
+            z-index: -1;
+
+            svg {
+                filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
+                transform: scale(2) translateY(5px);
+
+                path {
+                    stroke: white;
+                }
+            }
+        }
+    }
+
+    .view-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .view-heading {
+        margin-bottom: 64px;
+
+        h1.headline {
+            font-size: 64px;
+        }
+
+    }
+}

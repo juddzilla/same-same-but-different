@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Outlet } from "react-router-dom";
 import Icon from './components/Icons/index.jsx';
+import Header from './components/Header';
 
 const header = [
   { display: 'Home', to: '/' },
@@ -15,22 +16,15 @@ const footer = [
   { display: 'Contact', to: '/contact' },
 ];
 
+export const AppName = 'Spacedeck';
+
 export default () => {
   return (
     <>
-      <header>
-        <div className='header-container'>
-          { header.map((link, index) => (
-              <Link to={ link.to } key={index}>{ link.display }</Link>
-          ))}
-          <div className='account'>
-            <Link to='/account'>
-              { Icon('account') }
-            </Link>
-          </div>
-        </div>
-      </header>
-      <Outlet />
+      <Header />
+      <main>
+        <Outlet />
+      </main>
       <footer>
         { footer.map((link, index) => (
             <Link to={ link.to } key={index}>{ link.display }</Link>

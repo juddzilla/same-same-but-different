@@ -20,7 +20,10 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "postcss": "^8.4.31",
+    "postcss-map-get": "^0.3.0",
+    "postcss-mixins": "^9.0.4",
     "postcss-nested": "^6.0.1",
+    "postcss-simple-vars": "^7.0.1",
     "vite": "^4.4.11",
     "vite-plugin-html-config": "^1.0.11"
   },

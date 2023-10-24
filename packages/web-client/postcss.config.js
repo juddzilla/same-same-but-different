@@ -1,5 +1,12 @@
+import PostcssNested from 'postcss-nested';
+import PostcssSimpleVars from 'postcss-simple-vars';
+import PostcssMixins from 'postcss-mixins';
+import PostcssMapGet from 'postcss-map-get';
 export default {
-  plugins: {
-    'postcss-nested': { /* plugin options */ },
-  },
+  plugins: [
+    PostcssNested(),
+    PostcssSimpleVars(),
+    PostcssMixins(),
+    PostcssMapGet()
+  ],
 }

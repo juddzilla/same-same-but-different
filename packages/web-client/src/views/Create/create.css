@@ -1,10 +1,10 @@
-.games {
+.create-view {
     height: 100vh;
     position: relative;
     width: 100%;
 }
 
-.games h1 {
+.create-view h1 {
     color: white;
     font-size: 360px;
     position: absolute;
@@ -21,12 +21,14 @@
     justify-content: center;
     align-items: center;
     position: relative;
-}
 
-.game-choice.options .players-headline, .game-choice.options .duration-key  {
-    font-size: 40px;
-    font-weight: bold;
-    line-height: 60px;
+    &.options {
+        .players-headline, .duration-key {
+            font-size: 40px;
+            font-weight: bold;
+            line-height: 60px;
+        }
+    }
 }
 
 .game-duration {
@@ -49,35 +51,40 @@
 
 
 .game-choice.options {
-    background-color: var(--off-black);
-    color: white;
-    justify-content: flex-start;
     align-items: flex-start;
+    background-color: var(--off-black);
+    border-radius: 4px;
+    color: white;
     padding: 8px 16px;
     z-index: 2;
 
     .actions {
         align-items: center;
-        bottom: -64px;
+        bottom: -54px;
         cursor: pointer;
         display: flex;
         justify-content: flex-end;
+        left: 16px;
         position: absolute;
-        transform: translateX(-5px);
         width: 100%;
 
         .play {
-            display: flex;
             align-items: center;
+            display: flex;
+            width: 100%;
 
             span {
-                font-weight: bold;
-                font-size: 18px;
-                line-height: 22px;
-                transform: translateX(33px) translateY(-1px);
+                align-items: center;
                 background: var(--off-black);
+                border-radius: 8px;
                 color: white;
-                padding: 2px 4px 2px 10px;
+                display: flex;
+                font-size: 18px;
+                font-weight: bold;
+                height: 44px;
+                justify-content: center;
+                line-height: 22px;
+                width: calc(100% - 32px);
             }
 
             svg path {
@@ -96,6 +103,11 @@
         &.discoverable-type {
             align-items: center;
             display: flex;
+            justify-content: center;
+        }
+
+        &.discoverable-message {
+            font-weight: bold;
             justify-content: center;
         }
     }
@@ -162,18 +174,20 @@
 }
 
 .game-choices {
-    display: flex;
-    justify-content: center;
     align-items: center;
+    display: flex;
+    flex-direction: column;
     height: 100%;
+    padding-top: 150px;
+    overflow-x: hidden;
 
     &.P2 {
      .user-1 {
-         transform: translateX(-69px);
+         transform: translateX(-52px);
      }
         .user-2 {
             z-index: 1;
-            transform: translateX(46px) scale(0.75) translateY(-108px);
+            transform: translateX(64px) scale(0.75) translateY(-108px);
         }
     }
 }

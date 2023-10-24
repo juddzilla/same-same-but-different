@@ -101,7 +101,7 @@ const Component = () => {
 
       if (seconds < 1) {
         clearInterval(timer);
-        completed();
+        // completed();
       }
     }
     return () => { clearInterval(timer); };
@@ -154,7 +154,7 @@ const Component = () => {
         const now = parseInt((new Date().getTime() / 1000).toFixed(0));
 
         const setTimerTo = willEndAt - now;
-        setSeconds(setTimerTo);
+        setSeconds(9000);
 
         setCards(deselectCards(event.correct));
         setDisplay('countdown');
@@ -271,11 +271,13 @@ const Component = () => {
             }
 
             { display === 'play' &&
-                cards.map((card, index) => (
-                    <div key={index} onClick={select.bind(null, card.id)}>
-                      { Card(card) }
-                    </div>
-                ))
+                <div className='play-container'>
+                  { cards.map((card, index) => (
+                      <div key={index} onClick={select.bind(null, card.id)}>
+                        { Card(card) }
+                      </div>
+                  )) }
+                </div>
             }
 
             { display === 'completed' &&

@@ -6,26 +6,6 @@
     align-items: center;
 }
 
-.fill-one {
-    /*dots*/
-    background-image:
-            radial-gradient(white 10%, transparent 19.2%),
-            radial-gradient(white 10%, transparent 19.2%);
-    background-position: 0px 0px, 12px 12px;
-    background-size: 24px 24px;
-    background-color: var(--color);
-}
-
-.fill-two {
-    /*solid*/
-    background-color: var(--color);
-}
-
-.fill-three {
-    /*stripes*/
-    background-image: repeating-linear-gradient(135deg, var(--color), var(--color) 8px, white 6px, white 14px);
-}
-
 .play-card {
     border: 3px solid var(--off-black);
     width: 230px;
