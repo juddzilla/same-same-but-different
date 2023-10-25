@@ -1,3 +1,5 @@
+import ValidateAttempt from './validate-attempt';
+
 const CalcScore = (atts) => {
   if (!atts) {
     return 0;

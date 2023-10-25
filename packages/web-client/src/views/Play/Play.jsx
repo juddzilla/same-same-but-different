@@ -44,6 +44,11 @@ const players = {
   1: 'Them',
 };
 
+const indexPossessiveMap = {
+  0: 'mine',
+  1: 'theirs',
+}
+
 const toggleBodyEffect = (className) => {
   const body = document.body;
   body.classList.add(className);
@@ -73,12 +78,11 @@ const Component = () => {
   const webSocket = useRef(null);
 
   // game timer
-  const [isActive, setIsActive] = useState(false);
+  const [timerIsActive, setTimerActiveState] = useState(false);
   const [seconds, setSeconds] = useState(0);
 
   // game score
-  const initialAttempts = [[], null];
-  if (data.players === 2) { initialAttempts[1] = []; }
+  const initialAttempts = [data.attempts.mine, data.attempts.theirs];
   const [attempts, setAttempts] = useState(initialAttempts);
 
   const completed = () => {
@@ -86,6 +90,7 @@ const Component = () => {
       type: 'completed',
       id,
     }));
+    webSocket.current.close();
     setDisplay('completed');
     setTimeout(() => {
       navigate(`/game/${id}`);
@@ -94,53 +99,62 @@ const Component = () => {
 
   useEffect(() => {
     let timer = null;
-    if (isActive) {
+    if (timerIsActive) {
       timer = setInterval(() => {
         setSeconds((seconds) => seconds - 1);
       }, 1000);
 
       if (seconds < 1) {
         clearInterval(timer);
-        // completed();
+        completed();
       }
     }
     return () => { clearInterval(timer); };
   });
 
   useEffect(() => {
-    const deselectCards = (exclude) => {
+    const updatedCards = (correctAttempt) => {
       return cards.map(card => {
-        if (exclude && exclude.includes(card.id)) {
-          return false;
+        if (correctAttempt && correctAttempt.includes(card.id)) {
+          card.display = false;
         }
         card.selected = false;
         return card;
-      }).filter(Boolean);
+      });
     };
 
     webSocket.current = new WebSocket(`${WSHost}/${id}`);
 
+    webSocket.current.onclose = (e) => {
+      console.log('CLOSED?!', e);
+    };
+
     webSocket.current.onmessage = ({ data }) => {
       const event = JSON.parse(data);
+      // console.log('event', event);
 
       if (event.type === 'attempt') {
         const requester = equalsCheck(event.selected, selected);
         const position = requester ? 0 : 1;
-        attempts[position].push(event);
+        attempts[position].push({
+          attempt: event.selected,
+          correct: event.correct,
+        });
+
         setAttempts(attempts);
 
         if (event.correct) {
           toggleBodyEffect('right');
-          setCards(deselectCards(event.selected));
+          setCards(updatedCards(event.selected));
 
           if (requester) {
             selected = [];
           }
 
         } else if (requester) {
+          selected = [];
+          setCards(updatedCards());
           toggleBodyEffect('wrong');
-          setCards(deselectCards());
-          selected = []
         }
       }
 
@@ -148,19 +162,24 @@ const Component = () => {
           webSocket.current.close();
       }
 
+
+        console.log('D', display, seconds);
       if (event.type === 'start') {
+        if (display === 'play') {
+          return;
+        }
         const gameStart = parseInt((new Date(event.startedAt).getTime() / 1000).toFixed(0));
         const willEndAt = gameStart + duration;
         const now = parseInt((new Date().getTime() / 1000).toFixed(0));
 
         const setTimerTo = willEndAt - now;
-        setSeconds(9000);
+        setSeconds(setTimerTo);
 
-        setCards(deselectCards(event.correct));
+        setCards(updatedCards(event.correct));
         setDisplay('countdown');
         setTimeout(function() {
           setDisplay('play');
-          setIsActive(true);
+          setTimerActiveState(true);
         }, 2000);
       }
 
@@ -169,14 +188,9 @@ const Component = () => {
       }
 
       if (event.type === 'complete') {
-        setDisplay('waiting');
+        completed();
       }
     };
-
-    // webSocket.current.onclose = (event) => {
-    //   console.log('close event', event);
-    //   // redirect to stats
-    // }
 
     return () => webSocket.current.close();
   }, []);
@@ -223,38 +237,10 @@ const Component = () => {
       <>
         <div id='play-view' className={ playClassList.join(' ')}>
           <div className='view-heading'>
-            <h2>Play</h2>
+            <h1 className='headline'>Play</h1>
           </div>
-          <div className='game-score'>
-            <div className='player-scores'>
-              {
-                [...Array(data.players)].map((player, index) => {
-                  const label = players[index];
-                  const scoreClassList = ['player-score', `score-${index}`]
-                  const correct = CountAttempts(attempts[index], true);
-                  const points = CalcScore(attempts[index]);
-                  const total = CountAttempts(attempts[index]);
-                  return (
-                      <>
-                        <div className={scoreClassList.join(' ')} key={index}>
-                          <div className='player-name'>
-                            { label }
-                          </div>
-                          { Pie({ attempts: [correct, total], index, points }) }
-                        </div>
-                        { index === 0 &&
-                        <div className='time'>
-                          { seconds }
-                        </div>
-                        }
-                      </>
-                  );
-                })
-              }
-            </div>
-          </div>
-          <div className='play-board'>
             { ['countdown', 'loading', 'waiting' ].includes(display) &&
+              <div className='not-active-play'>
                 <div className={`pending ${display}`}>
                   <div className='pending-container'>
                     <div className='circle'></div>
@@ -262,24 +248,15 @@ const Component = () => {
                   </div>
                   { display === 'waiting' &&
                       <div className='copyUrl' onClick={copyUrl}>
+
                         <span>Click, Copy,</span>
                         { Icon('link') }
                         <span>Share</span>
                       </div>
                   }
                 </div>
+              </div>
             }
-
-            { display === 'play' &&
-                <div className='play-container'>
-                  { cards.map((card, index) => (
-                      <div key={index} onClick={select.bind(null, card.id)}>
-                        { Card(card) }
-                      </div>
-                  )) }
-                </div>
-            }
-
             { display === 'completed' &&
                 <div className='completed-text'>
                   <h3>Doing</h3>
@@ -287,7 +264,50 @@ const Component = () => {
                   <h3>Calculations</h3>
                 </div>
             }
-          </div>
+
+            { display === 'play' &&
+              <div className='play-board'>
+                <div className='game-score'>
+                  <div className='player-scores'>
+                    {
+                      [...Array(data.players)].map((player, index) => {
+                        const label = players[index];
+                        const scoreClassList = ['player-score', `score-${index}`]
+                        const correct = CountAttempts(attempts[index], true);
+                        const points = data.score[indexPossessiveMap[index]] + CalcScore(attempts[index]);
+                        const total = CountAttempts(attempts[index]);
+                        return (
+                            <>
+                              <div className={scoreClassList.join(' ')} key={index}>
+                                <div className='player-name'>
+                                  { label }
+                                </div>
+                                { Pie({ attempts: [correct, total], index, points }) }
+                              </div>
+                              { index === 0 &&
+                                  <div className='time'>
+                                    { seconds }
+                                  </div>
+                              }
+                            </>
+                        );
+                      })
+                    }
+                  </div>
+                </div>
+                <div className='play-container'>
+                  { cards.map((card, index) => {
+                    if (card.display) {
+                      return (
+                          <div key={index} onClick={select.bind(null, card.id)}>
+                            { Card(card) }
+                          </div>
+                      );
+                    }
+                  }) }
+                </div>
+              </div>
+            }
         </div>
       </>
   )
@@ -299,7 +319,7 @@ const Route = {
     if (request.results && request.results.completedAt !== null) {
       return redirect(`/game/${params.id}`);
     }
-
+    console.log('PLAY INIT', request.results);
     return request.results;
   },
   path: "/play/:id",

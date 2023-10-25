@@ -84,7 +84,7 @@ wss.on('connection', async function connection(ws, request) {
   }
 
   const Game = await Domain.Games.Play({ id: publicHash, userId });
-
+  console.log('GAM', Game);
   // verify game exists
   if (!Game || !Object.hasOwn(Game, 'id')) {
     ws.close(1000, JSON.stringify({type: 'error', code: 404}));
@@ -137,15 +137,16 @@ wss.on('connection', async function connection(ws, request) {
     } else if (Game.playerId !== userId) {
       // if user is not associated 2nd player
       ws.close(1000, JSON.stringify({ type: 'error', code: 401 }));
+      return;
     }
   }
-
 
   // send update to UI
   setTimeout(function() {
     const startedAt = Game.startedAt || new Date().toISOString();
     const type = Rooms[publicHash].users.length === Rooms[publicHash].players ? 'start' : 'waiting';
     let correct = [];
+
     if (Game.attempts) {
       correct = Object.keys(Game.attempts).reduce((acc, cur) => {
         for (let j = 0; j < Game.attempts[cur].length; j++) {
@@ -169,16 +170,6 @@ wss.on('connection', async function connection(ws, request) {
       if (Game.startedAt === null) {
         Domain.Games.Update({ publicHash, startedAt });
       }
-
-      // setTimeout(function() {
-      //   Domain.Game.Complete({ publicHash });
-      //   const response = {
-      //     gameId: publicHash,
-      //     type: 'complete',
-      //   };
-      //
-      //   broadcastToRoom(response.gameId, response);
-      // }, Game.duration * 1000);
     }
 
   }, 1200);
@@ -192,11 +183,6 @@ wss.on('connection', async function connection(ws, request) {
 
       Rooms[publicHash].connections.splice(connectionIndex, 1);
       Rooms[publicHash].users.splice(userIndex, 1);
-
-    }
-
-    if (WaitingFor2P.includes(publicHash)) {
-      removeFromWaitingFor2P(publicHash);
     }
   });
 

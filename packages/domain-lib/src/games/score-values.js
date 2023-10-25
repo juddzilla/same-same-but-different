@@ -1,3 +1,3 @@
 import ClientsUtil from '../interfaces/clients-util';
 
-export default ClientsUtil.Game.ValidateAttempt;
+export default ClientsUtil.Game.ScoreUtil.Values;

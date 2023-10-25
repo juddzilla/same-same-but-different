@@ -40,9 +40,8 @@ body {
 }
 
 h1 {
-  color: white;
-
   &.headline {
+    color: white;
     font-size: 100px;
     line-height: 1;
   }
@@ -71,10 +70,10 @@ footer {
 
 
 main {
-
-  @mixin breakpoint-up medium {
-    //padding: var(--header-height) 0;
-  }
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
 
   > * {
     min-height: calc(100vh - var(--header-height) - var(--header-height));
@@ -84,10 +83,9 @@ main {
 #root {
   display: flex;
   flex-direction: column;
+  height: 100%;
   min-height: 100vh;
   width: 100vw;
-
-
 }
 
 .color-one {

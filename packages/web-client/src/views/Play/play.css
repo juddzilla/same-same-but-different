@@ -1,4 +1,18 @@
 @import '../../styles/breakpoints.css';
+@keyframes breathing {
+    0% {
+        transform: scale(2);
+    }
+
+    50% {
+        transform: scale(2.2);
+    }
+
+    100% {
+        transform: scale(2);
+    }
+}
+
 @keyframes grow {
     from {
         transform: scale(1);
@@ -19,6 +33,21 @@
     }
     100% {
         transform: translateX(250px) translateY(-48px);
+        z-index: 2
+    }
+}
+
+@keyframes share-mobile {
+    0% {
+        transform: translateX(0) translateY(0);
+        z-index: -2
+    }
+    30% {
+        transform: translateX(0) translateY(300px);
+        z-index: -2
+    }
+    100% {
+        transform: translateX(0) translateY(100px);
         z-index: 2
     }
 }
@@ -48,39 +77,52 @@ body.wrong .play-card .border {
 
 
 .play-board {
-    overflow: scroll;
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     padding-bottom: 64px;
+    padding-top: 16px;
+    overflow: scroll;
     width: 100%;
 
-    h1 { color: var(--off-black)}
-
-    .completed-text {
-        font-size: 84px;
-        width: 500px;
-
-        h3 {
-            margin-block-start: 0;
-            margin-block-end: 0;
-        }
-
+    @mixin breakpoint-up medium {
+        padding-top: 64px;
     }
 }
 
 #play-view {
+    flex: 1;
     padding-bottom: 64px;
+    min-height: unset;
 
-    @mixin breakpoint-down small {
-        padding: 16px 0;
-    }
-
-    &.show-play {
+    &.show-play, &.show-completed {
         .game-score {
             display: block;
         }
+
+        h1.headline {
+            text-shadow: none;
+            z-index: -1;
+        }
      }
 
+    h1 {
+        text-shadow: 2px 2px 38px rgb(0 0 0 / 0.4);
+    }
+
+    .completed-text {
+        font-size: 48px;
+        padding-top: 100px;
+        padding-left: 24px;
+    }
+
+    .view-container {
+        min-height: unset;
+    }
+
     .view-heading {
-        height: unset;
+        position: absolute;
         
         h2 {
             position: relative;
@@ -111,10 +153,13 @@ body.wrong .play-card .border {
     }
 
     .play-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 16px;
+        width: 100%;
+
         @mixin breakpoint-down small {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
             width: 740px;
             height: 100%;
             min-height: calc(100vh - 200px);
@@ -122,7 +167,7 @@ body.wrong .play-card .border {
     }
 
     .player-scores {
-        @mixin breakpoint-down small {
+        @mixin breakpoint-down medium {
             background-color: var(--off-black);
             bottom: 0;
             color: white;
@@ -130,6 +175,14 @@ body.wrong .play-card .border {
             position: fixed;
             width: 100%;
             z-index: 1;
+
+            flex-direction: row;
+
+            .pie {
+                @mixin breakpoint-down medium {
+                    position: absolute;
+                }
+            }
         }
     }
 
@@ -141,6 +194,10 @@ body.wrong .play-card .border {
         margin: 0 16px;
         text-align: center;
         justify-content: center;
+
+        @mixin breakpoint-down medium {
+            width: 100%;
+        }
     }
 }
 
@@ -149,10 +206,17 @@ body.wrong .play-card .border {
     background-color: #8AD19F;
 }
 
+.not-active-play {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    padding-top: 25vh;
+    width: 100%;
+}
+
 .pending {
     display: flex;
     justify-content: center;
-    margin-top: 64px;
 
     .pending-container {
         align-items: center;
@@ -164,6 +228,7 @@ body.wrong .play-card .border {
     .circle {
         background: white;
         border-radius: 50%;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
         height: 160px;
         position: absolute;
         transition: background-color 90ms linear, transform 90ms linear;
@@ -179,8 +244,10 @@ body.wrong .play-card .border {
             color: white;
         }
         .circle {
+            animation: breathing 5s ease-out infinite normal;
             background-color: var(--off-black);
             transform: scale(2);
+
         }
 
         .copyUrl {
@@ -188,7 +255,7 @@ body.wrong .play-card .border {
             animation-delay: 500ms;
             animation-duration: 2s;
             animation-fill-mode: forwards;
-            animation-name: share;
+            animation-name: share-mobile;
             background-color: white;
             border-radius: 50%;
             color: var(--off-black);
@@ -202,6 +269,10 @@ body.wrong .play-card .border {
             width: 160px;
             z-index: -2;
 
+            @mixin breakpoint-up medium {
+                animation-name: share;
+            }
+
             .link {
                 height: 64px;
             }
@@ -210,14 +281,20 @@ body.wrong .play-card .border {
 
     &.countdown {
          color: var(--off-black);
+
         .circle {
             animation-duration: 3s;
             animation-name: grow;
             background: white;
         }
+
     }
 
     &.completed {
         .circle { display: none }
+    }
+
+    &.loading {
+        color: var(--off-black);
     }
 }

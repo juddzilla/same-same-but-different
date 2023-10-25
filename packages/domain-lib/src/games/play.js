@@ -7,6 +7,7 @@ const { Game, Games } = DB;
 export default async ({ id, userId }) => {
   try {
     const game = await Game.Find({ publicHash: id });
+    console.log('game', game);
     if (!game || !game.id) {
       return { game: { id: false } };
     }
@@ -33,7 +34,7 @@ export default async ({ id, userId }) => {
     const s = { mine: 0, theirs: 0};
 
     for (let j = 0; j < attempts.length; j ++) {
-      const { attempt, correct, created_at } = attempts[j];
+      const { attempt, correct, created_at, user_id } = attempts[j];
       const obj = parseInt(attempts[j].user_id, 10) === parseInt(userId, 10) ? 'mine' : 'theirs';
       const addToScore = correct ? Values.correct : Values.incorrect;
       s[obj] += addToScore;
@@ -41,6 +42,7 @@ export default async ({ id, userId }) => {
         attempt,
         correct,
         createdAt: created_at,
+        userId: user_id,
       });
     }
 
