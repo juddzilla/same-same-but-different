@@ -19,9 +19,9 @@ const Component = () => {
     };
   });
   return (
-      <div className='default-view'>
+      <div className='default-view' >
         <h1 className='headline'>Join</h1>
-        <h2>Waiting for a game to become available</h2>
+        <h2 style={{ padding: '24px' }}>Waiting for a game to become available</h2>
       </div>
   )
 };

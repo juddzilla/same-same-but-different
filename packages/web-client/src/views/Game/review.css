@@ -1,14 +1,14 @@
 @import '../../styles/breakpoints.css';
 
 .game-not-found {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    h1 { font-size: 48px; margin-bottom: 64px; }
-    h1 { font-size: 40px }
     img { transform: scale(3) }
+
+    .view-content {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        padding-top: 56px;
+    }
 }
 
 .game-review {
@@ -36,27 +36,11 @@
         }
     }
 
-    .game-info {
-        position: relative;
+    .game-date {
         font-size: 20px;
-        position: relative;
-        top: -12px;
-        left: -11px;
-
-        @mixin breakpoint-up medium {
-            left: 0;
-            top: -18px;
-        }
-
-        .game-date {
-            font-weight: bold;
-            padding-left: 18px;
-        }
-
-        .game-duration {
-            font-size: 16px;
-            margin-top: 0;
-        }
+        font-weight: bold;
+        padding: 18px;
+        text-align: center;
     }
 
     .game-score {
@@ -76,7 +60,6 @@
     .play-card {
         box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     }
-
 
 
     .player-attempts {
@@ -179,28 +162,6 @@
 
         .play-card .border {
             border-width: 0;
-        }
-    }
-
-    .view-heading {
-        height: unset;
-        max-width: 330px;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-
-        @mixin breakpoint-up medium {
-            justify-content: flex-end;
-            margin-bottom: -64px;
-            max-width: unset;
-        }
-
-        h1 {
-            line-height: 1;
-            @mixin breakpoint-up medium {
-                font-size: 24vw;
-                line-height: 0.75;
-            }
         }
     }
 }

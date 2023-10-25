@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Outlet } from "react-router-dom";
-import Icon from './components/Icons/index.jsx';
-import Header from './components/Header';
+import Icon from '../components/Icons';
+import Header from '../components/Header';
 
 const header = [
   { display: 'Home', to: '/' },

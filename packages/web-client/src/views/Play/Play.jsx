@@ -19,6 +19,7 @@ const { WSHost } = ENV;
 import './play.css';
 
 let selected = [];
+let init = false;
 
 const copyUrl = async () => {
   try {
@@ -35,19 +36,27 @@ const displayMap = {
   waiting: 'Waiting for Player 2'
 };
 
-const equalsCheck = (a, b) =>
-    a.length === b.length &&
-    a.every((e) => b.includes(e));
+const headlineMap = {
+  countdown: 'Here It Comes!',
+  loading: 'Readying',
+  waiting: 'Almost There',
+  play: 'Play',
+  completed: 'Good Job!'
+};
+
+const indexPossessiveMap = {
+  0: 'mine',
+  1: 'theirs',
+};
 
 const players = {
   0: 'You',
   1: 'Them',
 };
 
-const indexPossessiveMap = {
-  0: 'mine',
-  1: 'theirs',
-}
+const equalsCheck = (a, b) =>
+    a.length === b.length &&
+    a.every((e) => b.includes(e));
 
 const toggleBodyEffect = (className) => {
   const body = document.body;
@@ -59,13 +68,13 @@ const toggleBodyEffect = (className) => {
 };
 
 const Component = () => {
-  const data = useLoaderData();
-  const duration = data.duration;
+  const Game = useLoaderData();
+  const duration = Game.duration;
   const params = useParams();
   const navigate = useNavigate();
   const id = params.id;
 
-  const Deck = data.deck.split(',').map(val => {
+  const Deck = Game.deck.split(',').map(val => {
     return {
       display: true,
       id: val,
@@ -82,7 +91,7 @@ const Component = () => {
   const [seconds, setSeconds] = useState(0);
 
   // game score
-  const initialAttempts = [data.attempts.mine, data.attempts.theirs];
+  const initialAttempts = [Game.attempts.mine, Game.attempts.theirs];
   const [attempts, setAttempts] = useState(initialAttempts);
 
   const completed = () => {
@@ -125,10 +134,6 @@ const Component = () => {
 
     webSocket.current = new WebSocket(`${WSHost}/${id}`);
 
-    webSocket.current.onclose = (e) => {
-      console.log('CLOSED?!', e);
-    };
-
     webSocket.current.onmessage = ({ data }) => {
       const event = JSON.parse(data);
       // console.log('event', event);
@@ -162,12 +167,8 @@ const Component = () => {
           webSocket.current.close();
       }
 
-
-        console.log('D', display, seconds);
-      if (event.type === 'start') {
-        if (display === 'play') {
-          return;
-        }
+      if (event.type === 'start' && (Game.players === 1 || !init)) {
+        init = true;
         const gameStart = parseInt((new Date(event.startedAt).getTime() / 1000).toFixed(0));
         const willEndAt = gameStart + duration;
         const now = parseInt((new Date().getTime() / 1000).toFixed(0));
@@ -231,83 +232,81 @@ const Component = () => {
     setCards([...cards]);
   };
 
-  const playClassList = ['view-container', `players-${data.players}`, `show-${display}`];
+  const playClassList = [`players-${Game.players}`, `show-${display}`];
 
   return (
       <>
         <div id='play-view' className={ playClassList.join(' ')}>
-          <div className='view-heading'>
-            <h1 className='headline'>Play</h1>
-          </div>
-            { ['countdown', 'loading', 'waiting' ].includes(display) &&
-              <div className='not-active-play'>
-                <div className={`pending ${display}`}>
-                  <div className='pending-container'>
-                    <div className='circle'></div>
-                    <h1>{ displayMap[display] }</h1>
-                  </div>
-                  { display === 'waiting' &&
-                      <div className='copyUrl' onClick={copyUrl}>
+          <h1 className='headline'>{ headlineMap[display] }</h1>
+          { ['countdown', 'loading', 'waiting' ].includes(display) &&
+            <div className='not-active-play'>
+              <div className={`pending ${display}`}>
+                <div className='pending-container'>
+                  <div className='circle'></div>
+                  <h1>{ displayMap[display] }</h1>
+                </div>
+                { display === 'waiting' &&
+                    <div className='copyUrl' onClick={copyUrl}>
 
-                        <span>Click, Copy,</span>
-                        { Icon('link') }
-                        <span>Share</span>
-                      </div>
+                      <span>Click, Copy,</span>
+                      { Icon('link') }
+                      <span>Share</span>
+                    </div>
+                }
+              </div>
+            </div>
+          }
+          { display === 'completed' &&
+              <div className='completed-text'>
+                <h3>Doing</h3>
+                <h3>Final</h3>
+                <h3>Calculations</h3>
+              </div>
+          }
+
+          { display === 'play' &&
+            <div className='play-board'>
+              <div className='game-score'>
+                <div className='player-scores'>
+                  {
+                    [...Array(Game.players)].map((player, index) => {
+                      const label = players[index];
+                      const scoreClassList = ['player-score', `score-${index}`]
+                      const correct = CountAttempts(attempts[index], true);
+                      const points = Game.score[indexPossessiveMap[index]] + CalcScore(attempts[index]);
+                      const total = CountAttempts(attempts[index]);
+                      return (
+                          <>
+                            <div className={scoreClassList.join(' ')} key={index}>
+                              <div className='player-name'>
+                                { label }
+                              </div>
+                              { Pie({ attempts: [correct, total], index, points }) }
+                            </div>
+                            { index === 0 &&
+                                <div className='time'>
+                                  { seconds }
+                                </div>
+                            }
+                          </>
+                      );
+                    })
                   }
                 </div>
               </div>
-            }
-            { display === 'completed' &&
-                <div className='completed-text'>
-                  <h3>Doing</h3>
-                  <h3>Final</h3>
-                  <h3>Calculations</h3>
-                </div>
-            }
-
-            { display === 'play' &&
-              <div className='play-board'>
-                <div className='game-score'>
-                  <div className='player-scores'>
-                    {
-                      [...Array(data.players)].map((player, index) => {
-                        const label = players[index];
-                        const scoreClassList = ['player-score', `score-${index}`]
-                        const correct = CountAttempts(attempts[index], true);
-                        const points = data.score[indexPossessiveMap[index]] + CalcScore(attempts[index]);
-                        const total = CountAttempts(attempts[index]);
-                        return (
-                            <>
-                              <div className={scoreClassList.join(' ')} key={index}>
-                                <div className='player-name'>
-                                  { label }
-                                </div>
-                                { Pie({ attempts: [correct, total], index, points }) }
-                              </div>
-                              { index === 0 &&
-                                  <div className='time'>
-                                    { seconds }
-                                  </div>
-                              }
-                            </>
-                        );
-                      })
-                    }
-                  </div>
-                </div>
-                <div className='play-container'>
-                  { cards.map((card, index) => {
-                    if (card.display) {
-                      return (
-                          <div key={index} onClick={select.bind(null, card.id)}>
-                            { Card(card) }
-                          </div>
-                      );
-                    }
-                  }) }
-                </div>
+              <div className='play-container'>
+                { cards.map((card, index) => {
+                  if (card.display) {
+                    return (
+                        <div key={index} onClick={select.bind(null, card.id)}>
+                          { Card(card) }
+                        </div>
+                    );
+                  }
+                }) }
               </div>
-            }
+            </div>
+          }
         </div>
       </>
   )
@@ -319,7 +318,6 @@ const Route = {
     if (request.results && request.results.completedAt !== null) {
       return redirect(`/game/${params.id}`);
     }
-    console.log('PLAY INIT', request.results);
     return request.results;
   },
   path: "/play/:id",

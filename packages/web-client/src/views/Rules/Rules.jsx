@@ -77,10 +77,10 @@ const example4 = [
 const Component = () => {
   return (
       <div className='how-to-play'>
-        <h1>How To Play</h1>
+        <h1 className='headline'>How To Play</h1>
         <div className='how-to-play-container'>
-            <p>
-              If you've played <a href='https://en.wikipedia.org/wiki/Set_(card_game)'>Set</a>, you already know.
+            <p className='no-indent'>
+              If you've played <a className='external' href='https://en.wikipedia.org/wiki/Set_(card_game)'>Set</a>, you already know.
             </p>
             <p>
               <h2>The Game</h2>

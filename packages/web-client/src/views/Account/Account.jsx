@@ -16,10 +16,8 @@ const Component = () => {
 
   return (
       <div className='user-account'>
-        <div className='view-container'>
-          <div className='view-heading'>
-            <h2>Account</h2>
-          </div>
+        <h1 className='headline'>Account</h1>
+        <div className='view-content'>
           <div className='player-scores'>
             {
               Object.keys(data.outcomes).map((players, index) => {
@@ -45,14 +43,14 @@ const Component = () => {
             { data.games.map((game, index) => {
               return (
                   <div className='account-game' key={ index }>
-                    <span className='game-id'>{ game.id } </span>
                     <Link to={`/game/${game.id}`}>
                       <span className='index'>{ index + 1 }</span>
                       { ClientUtils.Utils.Date(game.completedAt) }
                       <span className='divider'>|</span>
-                      { game.players } Player Game
+
+                      <span className='player-game'>{ game.players }P</span>
                       <span className='divider'>|</span>
-                      { game.duration }s
+                      <span>{ game.duration }s</span>
                     </Link>
                   </div>
               );

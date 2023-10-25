@@ -87,7 +87,7 @@ body.wrong .play-card .border {
     width: 100%;
 
     @mixin breakpoint-up medium {
-        padding-top: 64px;
+        padding-top: 0;
     }
 }
 
@@ -96,19 +96,13 @@ body.wrong .play-card .border {
     padding-bottom: 64px;
     min-height: unset;
 
-    &.show-play, &.show-completed {
-        .game-score {
-            display: block;
-        }
-
+    &.show-play {
         h1.headline {
-            text-shadow: none;
+            background-color: transparent;
+            position: absolute;
+            top: unset;
             z-index: -1;
         }
-     }
-
-    h1 {
-        text-shadow: 2px 2px 38px rgb(0 0 0 / 0.4);
     }
 
     .completed-text {
@@ -117,36 +111,30 @@ body.wrong .play-card .border {
         padding-left: 24px;
     }
 
-    .view-container {
-        min-height: unset;
-    }
-
-    .view-heading {
-        position: absolute;
-        
-        h2 {
-            position: relative;
-        }
-    }
-
     .game-score {
-        display: none;
-        margin-bottom: 48px;
+        margin-top: 48px;
 
-        @mixin breakpoint-down small {
-            margin-bottom: 0;
+        @mixin breakpoint-down medium {
+            bottom: 0;
+            display: block;
+            left: 0;
+            margin-top: 0;
+            position: fixed;
+            width: 100%;
+            z-index: 2;
         }
     }
 
     .pie {
         &:before, &:after {
-            @mixin breakpoint-down small {
+            @mixin breakpoint-down medium {
                 background: none;
                 display: none;
+                --color: transparent
             }
         }
         .attempt-ratio {
-            @mixin breakpoint-down small {
+            @mixin breakpoint-down medium {
                 display: none;
             }
         }
@@ -169,10 +157,8 @@ body.wrong .play-card .border {
     .player-scores {
         @mixin breakpoint-down medium {
             background-color: var(--off-black);
-            bottom: 0;
             color: white;
             height: var(--header-height);
-            position: fixed;
             width: 100%;
             z-index: 1;
 
@@ -182,6 +168,22 @@ body.wrong .play-card .border {
                 @mixin breakpoint-down medium {
                     position: absolute;
                 }
+            }
+        }
+
+        .attempt-ratio {
+            display: none;
+
+            @mixin breakpoint-up large {
+                display: inline-block;
+            }
+        }
+
+        .player-name {
+            display: none;
+
+            @mixin breakpoint-up large {
+                display: unset;
             }
         }
     }

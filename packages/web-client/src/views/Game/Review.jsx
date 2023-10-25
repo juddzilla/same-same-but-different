@@ -24,7 +24,7 @@ export default (game) => {
   const month = date.toLocaleString('default', { month: 'long' });
   const start = `${month} ${day}, ${year}`;
 
-  const reviewClassList = ['game-review', 'view-container', `players-${game.players}`];
+  const reviewClassList = ['game-review', `players-${game.players}`];
 
   if (selected) {
     reviewClassList.push(`selected-${selected}`);
@@ -37,11 +37,9 @@ export default (game) => {
 
   return (
       <div className={ reviewClassList.join(' ') }>
-        <div className='view-heading'>
-          <h1 className='headline'>Review</h1>
-          <div className='game-info'>
-            <div className='game-date'>{ start }</div>
-          </div>
+        <h1 className='headline'>Review</h1>
+        <div className='game-info'>
+          <div className='game-date'>{ start }</div>
         </div>
         <div className='game-score'>
           <div className='player-scores'>

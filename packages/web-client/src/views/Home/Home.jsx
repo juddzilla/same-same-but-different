@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Icon from '../../components/Icons';
 
-import { AppName } from '../../App.jsx';
+import { AppName } from '../App.jsx';
 
 import './styles.css';
 
@@ -9,12 +9,9 @@ const Component = () => {
   return (
       <>
         <div className='home-view default-view'>
-          <div className='view-heading'>
-            <h1 className='headline'>{ AppName }</h1>
-          </div>
+          <h1 className='headline'>{ AppName }</h1>
 
           <div className='view-content'>
-
               <Link to='/play'>
                 <div className='home-link'>
                   { Icon('star') }

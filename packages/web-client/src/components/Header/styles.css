@@ -13,7 +13,15 @@ header {
     z-index: 3;
 
     &.show-menu {
-        .header-container { transform: translateX(0); }
+        .header-container {
+            box-shadow: 45px 50px 60px rgba(0,0,0,0.19), 0 40px 6px rgba(0,0,0,0.23);
+            transform: translateX(0);
+
+            @mixin breakpoint-up large {
+                box-shadow: none;
+            }
+
+        }
         .menu svg {
             transform: scale(0.7)  rotate(90deg);
         }
@@ -43,12 +51,29 @@ header {
         top: 63px;
         left: 0;
 
+        @mixin breakpoint-up large {
+            flex-direction: row;
+            transform: unset;
+            height: var(--header-height);
+            padding: 0 32px;
+            top: 0;
+            left: 0;
+            position: relative;
+            width: 100%;
+        }
+
         .account {
             display: flex;
-            //flex: 1;
-            justify-content: flex-end;
 
-            a { height: 64px; }
+            @mixin breakpoint-up large {
+                flex: 1;
+                justify-content: flex-end;
+            }
+
+            a {
+                height: 64px;
+                padding: 0;
+            }
             svg { transform: scale(0.7) }
             svg path, svg circle { stroke: white; }
         }
@@ -59,6 +84,17 @@ header {
             justify-content: center;
             display: flex;
             padding: 8px 0;
+
+            @mixin breakpoint-up large {
+                display: inline-block;
+                font-size: 18px;
+                margin-right: 32px;
+            }
+        }
+    }
+    .footer-links, .mobile-icon {
+        @mixin breakpoint-up large {
+            display: none;
         }
     }
 }

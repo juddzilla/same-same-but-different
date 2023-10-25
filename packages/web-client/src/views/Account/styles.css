@@ -1,12 +1,41 @@
+@import '../../styles/breakpoints.css';
 
 .user-account {
     position: relative;
 
     .player-scores {
+        width: 100%;
+        align-items: center;
+        padding-top: 24px;
+
+        @mixin breakpoint-up medium {
+            align-items: center;
+            padding-top: 64px;
+            width: unset;
+        }
+
         .player-name {
             cursor: default;
+            /* text-align: center; */
+            width: 156px;
+            padding: 0;
             &:hover {
                  transform: scale(1);
+            }
+        }
+
+        .player-score {
+            margin-bottom: 8px;
+        }
+
+        .score-1, .score-2 {
+            text-align: right;
+        }
+
+        .player-name {
+            @mixin breakpoint-up medium {
+                text-align: left;
+                width: 144px;
             }
         }
     }
@@ -16,8 +45,13 @@
         display: flex;
         flex-direction: column;
         font-size: 24px;
-        padding-top: 64px;
-        width: 720px;
+        width: 100%;
+
+        @mixin breakpoint-up large {
+            padding-top: 16px;
+            width: 720px;
+
+        }
 
         a {
             align-items: center;
@@ -53,5 +87,11 @@
             margin: 0 16px;
             transform: scale(0.5);
         }
+    }
+
+    .view-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 }

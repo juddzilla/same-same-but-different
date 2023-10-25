@@ -45,7 +45,6 @@ const wss = new WebSocketServer({
 });
 
 function broadcastToRoom(room, data) {
-  console.log('Rooms', Rooms);
   if (Object.hasOwn(Rooms, room)) {
     Rooms[room].connections.forEach(connection => connection.send(JSON.stringify(data)));
   }
@@ -84,7 +83,7 @@ wss.on('connection', async function connection(ws, request) {
   }
 
   const Game = await Domain.Games.Play({ id: publicHash, userId });
-  console.log('GAM', Game);
+
   // verify game exists
   if (!Game || !Object.hasOwn(Game, 'id')) {
     ws.close(1000, JSON.stringify({type: 'error', code: 404}));

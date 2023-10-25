@@ -1,72 +1,11 @@
 @import './breakpoints.css';
 
-.view-container {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    min-height: calc(100vh - 200px);
-    position: relative;
-
-    @mixin breakpoint-down small {
-        align-items: flex-start;
-    }
-
-    &.players-1 {
-        .score-0 .player-name,
-        .score-1,
-        .player-attempt h4,
-        .attempts-theirs
-        { display: none!important; }
-    }
-}
-
-.view-heading {
-    height: 150px;
-    display: flex;
-    justify-content: center;
-    position: relative;
-    width: 100%;
-
-    @mixin breakpoint-down small {
-        justify-content: flex-start;
-        position: absolute;
-        z-index: -1;
-    }
-    h2 {
-        position: absolute;
-        color: white;
-        font-size: 200px;
-        margin-block-start: 0;
-        margin-block-end: 0;
-        line-height: 1.25;
-
-        @mixin breakpoint-down medium {
-            font-size: 24px;
-        }
-    }
-}
-
-.view-heading {
-    height: unset;
-    max-width: 330px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-
-    @mixin breakpoint-up medium {
-        justify-content: flex-end;
-        margin-bottom: -64px;
-        max-width: unset;
-    }
-
-    h1 {
-        line-height: 1;
-        @mixin breakpoint-up medium {
-            font-size: 24vw;
-            line-height: 0.75;
-        }
-    }
+.players-1 {
+    .score-0 .player-name,
+    .score-1,
+    .player-attempt h4,
+    .attempts-theirs
+    { display: none!important; }
 }
 
 .player-scores {
@@ -125,9 +64,6 @@
 }
 
 .default-view {
-    h1 {
-        //position: relative;
-    }
     h2 {
         font-size: 64px;
         /*margin-top: 33vh;*/
@@ -135,7 +71,11 @@
     }
 
     .view-content {
-        padding: 16px 0;
+        padding: 32px 0;
+
+        @mixin breakpoint-up medium {
+            padding: 64px 0;
+        }
     }
 }
 

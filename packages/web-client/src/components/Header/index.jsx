@@ -23,7 +23,6 @@ export default () => {
 
   useEffect(() => {
     // execute on location change
-    console.log('Location changed!', location.pathname);
     setMenu(false);
   }, [location]);
 
@@ -41,9 +40,11 @@ export default () => {
             {Icon('account')}
           </Link>
         </div>
-        {footerLinks.map((link, index) => (
-            <Link to={link.to} key={index}>{link.display}</Link>
-        ))}
+        <div className='footer-links'>
+          {footerLinks.map((link, index) => (
+              <Link to={link.to} key={index}>{link.display}</Link>
+          ))}
+        </div>
       </div>
     </header>
   );

@@ -39,13 +39,13 @@ const Component = () => {
       <>
         <div className='create-view'>
           <h1 className='headline'>Create</h1>
-          <div className={`game-choices ${ state.players === 1 ? 'P1' : 'P2'}`}>
+          <div className={`view-content game-choices ${ state.players === 1 ? 'P1' : 'P2'}`}>
             <div className='game-choice player-icons'>
               <div className='user-icon user-1'>
-                <User />
+                { Icon('user') }
               </div>
               <div className='user-icon user-2'>
-                <User />
+                { Icon('user') }
               </div>
             </div>
             <div className='game-choice options'>
@@ -53,10 +53,10 @@ const Component = () => {
                 <div className='option-key'>Players</div>
                 <span className='option-value'>
                   <span onClick={setPlayers.bind(null, 1)} className={ state.players === 1 ? 'selected' : ''}>
-                    <One />
+                    { Icon('one') }
                   </span>
                   <span onClick={setPlayers.bind(null, 2)} className={ state.players === 2 ? 'selected' : ''}>
-                    <Two />
+                    { Icon('two') }
                   </span>
                 </span>
               </div>
