@@ -1,15 +1,13 @@
 import { Link } from 'react-router-dom';
 import Icon from '../../components/Icons';
 
-import { AppName } from '../App.jsx';
-
 import './styles.css';
 
 const Component = () => {
   return (
       <>
         <div className='home-view default-view'>
-          <h1 className='headline'>{ AppName }</h1>
+          <h1 className='headline'>SpaceBunch</h1>
 
           <div className='view-content'>
               <Link to='/play'>

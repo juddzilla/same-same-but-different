@@ -29,7 +29,9 @@
   },
   "scripts": {
     "dev": "nodemon --config .nodemonrc.json --exec vite -- --mode=dev",
-    "build": "vite build",
+    "build": "yarn run build:host-paths && yarn run build:vite",
+    "build:host-paths": "cd ../public-host && yarn run build:public-paths",
+    "build:vite": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
