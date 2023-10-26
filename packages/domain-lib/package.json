@@ -1,5 +1,6 @@
 {
   "license": "GPL",
+  "main": "index.js",
   "name": "domain-lib",
   "version": "1.0.0",
   "type": "module",
