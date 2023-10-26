@@ -1,3 +1,3 @@
-import findFilesInDir from './src/files-in-dir';
+import Game from './src/game';
 
-export const FindFilesInDir = findFilesInDir;
+export default { Game }

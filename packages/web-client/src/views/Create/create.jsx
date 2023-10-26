@@ -2,11 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import API from '../../interfaces/public-host.js';
-
-import One from '../../components/Icons/One-Square.jsx';
-import Two from '../../components/Icons/Two-Square.jsx';
-import User from '../../components/Icons/User.jsx';
-
 import Icon from '../../components/Icons';
 
 import './create.css';

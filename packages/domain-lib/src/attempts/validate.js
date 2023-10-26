@@ -1,3 +1,3 @@
-import ClientsUtil from '../interfaces/clients-util';
+import Utils from '../interfaces/utils';
 
-export default ClientsUtil.Game.ValidateAttempt;
+export default Utils.Game.ValidateAttempt;

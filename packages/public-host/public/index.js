@@ -2,7 +2,7 @@ import PublicHostRoutes from './paths.json';
 
 const HostPaths = Object.keys(PublicHostRoutes);
 
-const request = async (url, opts) => {
+const index = async (url, opts) => {
   const options = {
     credentials: 'include',
     ...opts,
@@ -16,19 +16,19 @@ const request = async (url, opts) => {
 };
 
 const Fetch = {
-  DELETE: (url) => request(url, {
+  DELETE: (url) => index(url, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' }
   }),
-  GET: (url) => request(url),
-  POST: (url, data) => request(url, {
+  GET: (url) => index(url),
+  POST: (url, data) => index(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: data,
   }),
-  PUT: (url, data) => request(url, {
+  PUT: (url, data) => index(url, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

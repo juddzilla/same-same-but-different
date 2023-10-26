@@ -20,7 +20,6 @@ export default {
   method: 'GET',
   name: 'GamePlay',
   path: '/game/:id/play',
-
   schema: {
     params: {
       properties: {

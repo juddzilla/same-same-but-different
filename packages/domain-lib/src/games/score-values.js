@@ -1,3 +1,3 @@
-import ClientsUtil from '../interfaces/clients-util';
+import Utils from '../interfaces/utils';
 
-export default ClientsUtil.Game.ScoreUtil.Values;
+export default Utils.Game.ScoreUtil.Values;

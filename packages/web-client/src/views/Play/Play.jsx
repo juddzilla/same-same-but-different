@@ -6,14 +6,14 @@ import {
   useLoaderData,
 } from 'react-router-dom';
 
-import ClientUtils from '../../interfaces/clients-lib';
+import Utils from '../../interfaces/utils';
 import ENV from '../../interfaces/environment';
 import API from '../../interfaces/public-host';
 import Card from '../../components/Card/Card.jsx';
 import Icon from '../../components/Icons';
 import Pie from '../../components/Pie';
 
-const { CalcScore, CountAttempts } = ClientUtils.Game.ScoreUtil;
+const { CalcScore, CountAttempts } = Utils.Game.ScoreUtil;
 const { WSHost } = ENV;
 
 import './play.css';

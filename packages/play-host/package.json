@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "dependencies": {
     "domain-lib": "1.0.0",
+    "utils-lib": "1.0.0",
     "ws": "^8.14.2"
   },
   "type": "module",

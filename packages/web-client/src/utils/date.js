@@ -3,6 +3,5 @@ export default (timestamp) => {
   const [year, m, day] = d1.split('-');
   const date = new Date(year, parseInt(m, 10) - 1, day);  // 2009-11-10
   const month = date.toLocaleString('default', { month: 'long' });
-  const dateString = `${month} ${day}, ${year}`;
-  return dateString;
+  return `${month} ${day}, ${year}`;
 }

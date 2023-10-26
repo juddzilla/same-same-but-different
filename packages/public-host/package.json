@@ -9,10 +9,11 @@
     "@fastify/helmet": "^11.1.1",
     "domain-lib": "1.0.0",
     "fastify": "^4.24.1",
+    "glob": "^10.3.10",
     "utils-lib": "1.0.0"
   },
   "license": "UNLICENSED",
-  "main": "index.js",
+  "main": "public/index.js",
   "name": "public-host",
   "private": true,
   "scripts": {

@@ -1,13 +1,12 @@
 import DB from '../interfaces/db';
-import ClientUtils from '../interfaces/clients-util';
+import Utils from '../interfaces/utils';
 
-const { Values } = ClientUtils.Game.ScoreUtil;
+const { Values } = Utils.Game.ScoreUtil;
 const { Game, Games } = DB;
 
 export default async ({ id, userId }) => {
   try {
     const game = await Game.Find({ publicHash: id });
-    console.log('game', game);
     if (!game || !game.id) {
       return { game: { id: false } };
     }

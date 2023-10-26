@@ -1,7 +1,7 @@
 import { Link, useLoaderData } from 'react-router-dom';
 
 import API from '../../interfaces/public-host';
-import ClientUtils from '../../interfaces/clients-lib';
+import FormatDate from '../../utils/date';
 import Pie from '../../components/Pie';
 
 import './styles.css';
@@ -45,7 +45,7 @@ const Component = () => {
                   <div className='account-game' key={ index }>
                     <Link to={`/game/${game.id}`}>
                       <span className='index'>{ index + 1 }</span>
-                      { ClientUtils.Utils.Date(game.completedAt) }
+                      { FormatDate(game.completedAt) }
                       <span className='divider'>|</span>
 
                       <span className='player-game'>{ game.players }P</span>

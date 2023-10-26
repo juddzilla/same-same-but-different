@@ -1,4 +1,4 @@
-import API from 'public-host-api-lib';
+import API from 'public-host';
 import ENV from './environment';
 const { APIHost } = ENV;
 

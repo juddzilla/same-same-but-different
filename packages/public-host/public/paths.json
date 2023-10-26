@@ -3,21 +3,9 @@
     "method": "GET",
     "path": "/game/:id/play"
   },
-  "GamesJoin": {
-    "method": "GET",
-    "path": "/games"
-  },
-  "Game": {
-    "method": "GET",
-    "path": "/game/:id"
-  },
   "GamesCreate": {
     "method": "POST",
     "path": "/games"
-  },
-  "AuthCheck": {
-    "method": "GET",
-    "path": "/whothatis"
   },
   "Account": {
     "method": "GET",

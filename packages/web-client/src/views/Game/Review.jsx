@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import FormatDate from '../../utils/date';
 import Card from '../../components/Card/Card.jsx';
 import Icon from '../../components/Icons/index.jsx';
 import Pie from '../../components/Pie';
@@ -18,11 +19,7 @@ const possesive = {
 
 export default (game) => {
   const [selected, setSelected] = useState(null);
-  const d1 = game.startedAt.split('T')[0];
-  const [year, m, day] = d1.split('-');
-  const date = new Date(year, parseInt(m, 10) - 1, day);  // 2009-11-10
-  const month = date.toLocaleString('default', { month: 'long' });
-  const start = `${month} ${day}, ${year}`;
+  const start = FormatDate(game.startedAt);
 
   const reviewClassList = ['game-review', `players-${game.players}`];
 

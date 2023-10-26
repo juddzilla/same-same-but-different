@@ -20,7 +20,6 @@ export default {
   method: 'POST',
   name: 'GamesCreate',
   path: '/games',
-
   schema: {
     body: {
       properties: {

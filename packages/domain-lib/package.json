@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "clients-lib": "1.0.0",
     "nanoid": "^5.0.2",
-    "pg-lib": "1.0.0"
+    "pg-lib": "1.0.0",
+    "utils-lib": "1.0.0"
   }
 }
