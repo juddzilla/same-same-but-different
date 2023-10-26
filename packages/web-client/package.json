@@ -31,7 +31,7 @@
     "dev": "nodemon --config .nodemonrc.json --exec vite -- --mode=dev",
     "build": "yarn run build:host-paths && yarn run build:vite",
     "build:host-paths": "cd ../public-host && yarn run build:public-paths",
-    "build:vite": "vite build",
+    "build:vite": "vite build -- --mode=production",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },

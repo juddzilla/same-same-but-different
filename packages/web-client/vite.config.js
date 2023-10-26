@@ -11,8 +11,8 @@ const mode = args.filter(v => v.includes('mode'))[0];
 if (mode) {
   const value = mode.split('=')[1];
   if (value === 'production') {
-    API = 'https://api.spudspaceman.tv';
-    WS = 'wss://api.spudspaceman.tv';
+    API = 'https://api.spacebunch.app';
+    WS = 'wss://play.spacebunch.app';
   }
 }
 // const API =
