@@ -7,12 +7,8 @@ COPY yarn.lock .
 
 COPY ./packages/play-host/ ./packages/play-host/
 COPY ./packages/domain-lib/ ./packages/domain-lib/
+COPY ./packages/pg-lib/ ./packages/pg-lib/
 COPY ./packages/utils-lib/ ./packages/utils-lib/
-
-WORKDIR /app/packages/play-host/
-
-RUN yarn install --pure-lockfile --non-interactive
-RUN yarn build
 
 FROM node:18-alpine
 
@@ -22,6 +18,10 @@ COPY --from=build /app/yarn.lock /app/yarn.lock
 COPY --from=build /app/packages/domain-lib/package.json /app/packages/domain-lib/package.json
 COPY --from=build /app/packages/domain-lib/index.js /app/packages/domain-lib/index.js
 COPY --from=build /app/packages/domain-lib/src /app/packages/domain-lib/src
+
+COPY --from=build /app/packages/pg-lib/package.json /app/packages/pg-lib/package.json
+COPY --from=build /app/packages/pg-lib/index.js /app/packages/pg-lib/index.js
+COPY --from=build /app/packages/pg-lib/src /app/packages/pg-lib/src
 
 COPY --from=build /app/packages/utils-lib/package.json /app/packages/utils-lib/package.json
 COPY --from=build /app/packages/utils-lib/index.js /app/packages/utils-lib/index.js
