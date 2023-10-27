@@ -43,6 +43,7 @@ const tables = {
       id: 'primaryId',
       created_at: 'createdAt',
       user_id: 'idRef',
+      discoverable: { type: 'boolean', default: true },
       duration: {
         type: 'integer',
         notNull: true,
@@ -53,7 +54,6 @@ const tables = {
         default: 1,
       },
       player_id: { type: 'integer' },
-      public: { type: 'boolean', default: true },
       public_hash: { notNull: true, type: 'text' },
       started_at: { type: 'timestamptz' },
       completed_at: { type: 'timestamptz' },
@@ -74,7 +74,7 @@ const tables = {
       { uniq_provider: 'unique (name)' },
     ],
   },
-  oauth_user: {
+  oauth_users: {
     schema: {
       id: 'primaryId',
       created_at: 'createdAt',

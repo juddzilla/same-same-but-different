@@ -2,7 +2,7 @@
 const helper = require('../src/migrations_helper.js');
 
 const tables = {
-  game_deck: {
+  game_decks: {
     schema: {
       id: 'primaryId',
       created_at: 'createdAt',
