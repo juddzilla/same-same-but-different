@@ -1,4 +1,5 @@
 import { WebSocketServer } from 'ws';
+
 import ENV from './interfaces/environment';
 import Domain from './interfaces/domain';
 const { websocketPort } = ENV;
@@ -7,14 +8,19 @@ const Rooms = {};
 const WaitingForGame = [];
 const WaitingFor2P = [];
 
-const parseCookie = str =>
-  str
-    .split(';')
-    .map(v => v.split('='))
-    .reduce((acc, v) => {
-      acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
-      return acc;
-    }, {});
+const parseCookie = str => {
+  if (!str) {
+    return false;
+  }
+  return str
+      .split(';')
+      .map(v => v.split('='))
+      .reduce((acc, v) => {
+        acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+        return acc;
+      }, {});
+}
+
 
 function removeFromWaitingFor2P(id) {
   const waitingIndex = WaitingFor2P.indexOf(id);
@@ -51,12 +57,17 @@ function broadcastToRoom(room, data) {
 }
 
 wss.on('connection', async function connection(ws, request) {
-  // console.log('connection');
   const cookies = parseCookie(request.headers.cookie);
+
+  if (cookies === false) {
+    ws.close(1000, JSON.stringify({type: 'error', code: 400}));
+    return;
+  }
   const userId = await Domain.Auth.CookieUser(cookies);
 
   if (!userId) {
     ws.close(1000, JSON.stringify({type: 'error', code: 400}));
+    return;
   }
 
   if (request.url === '/join') {
@@ -119,7 +130,7 @@ wss.on('connection', async function connection(ws, request) {
   ) {
     if (WaitingForGame.length) {
     // if game discoverable === true
-      
+
       const joiner = WaitingForGame.shift();
       joiner.send(JSON.stringify({ type: 'join', id: publicHash }));
     } else {
@@ -144,6 +155,7 @@ wss.on('connection', async function connection(ws, request) {
   setTimeout(function() {
     const startedAt = Game.startedAt || new Date().toISOString();
     const type = Rooms[publicHash].users.length === Rooms[publicHash].players ? 'start' : 'waiting';
+
     let correct = [];
 
     if (Game.attempts) {
@@ -214,3 +226,5 @@ wss.on('connection', async function connection(ws, request) {
     }
   });
 });
+
+// export default wss;

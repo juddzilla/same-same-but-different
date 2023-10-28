@@ -77,7 +77,6 @@ body.wrong .play-card .border {
 
 
 .play-board {
-    align-items: center;
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -88,6 +87,10 @@ body.wrong .play-card .border {
 
     @mixin breakpoint-up medium {
         padding-top: 0;
+    }
+
+    @mixin breakpoint-up large {
+        align-items: center;
     }
 }
 
