@@ -7,5 +7,6 @@ export default async (gameId) => {
     return attempts;
   } catch (err) {
     console.warn('game attempts err', err);
+    return false;
   }
 };

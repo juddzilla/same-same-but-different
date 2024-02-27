@@ -51,5 +51,6 @@ export default async ({ id, userId }) => {
     return game;
   } catch (error) {
     console.log('ERR', error);
+    return false;
   }
 };

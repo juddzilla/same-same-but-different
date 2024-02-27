@@ -32,5 +32,6 @@ export default async ({ discoverable, duration, players, userId }) => {
     return { publicHash } ;
   } catch (error) {
     console.log('ERR', error);
+    return false;
   }
 };

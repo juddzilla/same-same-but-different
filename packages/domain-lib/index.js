@@ -5,7 +5,6 @@ import Deck from './src/deck';
 import Game from './src/game';
 import GameAttempt from './src/game-attempt';
 import Games from './src/games';
-import Invitations from './src/invitations';
 import Sessions from './src/sessions';
 import Users from './src/users';
 import UserSessions from './src/user-sessions';
@@ -18,7 +17,6 @@ export default {
   Game,
   GameAttempt,
   Games,
-  Invitations,
   Sessions,
   Users,
   UserSessions,

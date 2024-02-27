@@ -1,4 +1,5 @@
 import DB from '../interfaces/db';
+import ScoreValues from '../games/score-values';
 
 const { User } = DB;
 
@@ -27,13 +28,14 @@ export default async ({ userId }) => {
     if (players === 1) {
       correct = attempts.filter(attempt => attempt.correct).length;
       incorrect = attempts.length - correct;
+      acc.outcomes[players.toString()].attempts[1] += attempts.length;
     } else {
       correct = attempts.filter(attempt => attempt.user_id === userId && attempt.correct).length;
-      incorrect = attempts.filter(attempt => attempt.user_id === userId).length;
+      incorrect = attempts.filter(attempt => attempt.user_id === userId && !attempt.correct).length;
+      acc.outcomes[players.toString()].attempts[1] += correct + incorrect;
     }
-    acc.outcomes[players.toString()].score += (correct * 10) + (incorrect * -5);
+    acc.outcomes[players.toString()].score += (correct * ScoreValues.correct) + (incorrect * ScoreValues.incorrect);
     acc.outcomes[players.toString()].attempts[0] += correct;
-    acc.outcomes[players.toString()].attempts[1] += attempts.length;
     return acc;
   }, {
     games: [],

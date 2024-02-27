@@ -12,5 +12,6 @@ export default async ({ attempt, correct, publicHash, userId }) => {
    });
   } catch (err) {
     console.warn('err', err);
+    return false;
   }
 }

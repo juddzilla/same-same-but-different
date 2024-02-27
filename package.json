@@ -10,10 +10,12 @@
   ],
   "repository": "git@github.com:juddzilla/same-same-but-different.git",
   "devDependencies": {
-    "dotenv-cli": "^7.3.0"
+    "dotenv-cli": "^7.3.0",
+    "jest": "^29.7.0"
   },
   "scripts": {
-    "step0": "npx github:juddzilla/step0 devDependencies"
+    "test": "dotenv -e .test.env -- node --experimental-vm-modules $( [ -f ./node_modules/.bin/jest ] && echo ./node_modules/.bin/jest || which jest ) --coverage --watch  --detectOpenHandles"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "type": "module"
 }
