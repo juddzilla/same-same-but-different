@@ -23,7 +23,8 @@ export default ({ id, selected }) => {
   const classList = [
     'play-card',
     `fill-${map.toWord[fill]}`,
-    `color-${map.toWord[color]}`
+    `color-${map.toWord[color]}`,
+    'rounded-md'
   ];
 
   if (selected) {
@@ -31,21 +32,25 @@ export default ({ id, selected }) => {
   }
 
   return (
-      <div
-          className={classList.join(' ')}
-          id={id}
-      >
-        <div className='border'>
-          <div className='shapes'>
-            {
-              [...Array(parseInt(quantity, 10))].map((n, i) => (
-                  <span key={i}>
-                    { Icon(Shape) }
-                  </span>
-              ))
-            }
+    <div >
+      <div className="">
+        <div
+            className={classList.join(' ')}
+            id={id}
+        >
+          <div className=''>
+            <div className='shapes'>
+              {
+                [...Array(parseInt(quantity, 10))].map((n, i) => (
+                    <span key={i}>
+                      { Icon(Shape) }
+                    </span>
+                ))
+              }
+            </div>
           </div>
         </div>
       </div>
+    </div>
   );
 };

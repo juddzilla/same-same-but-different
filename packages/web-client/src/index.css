@@ -9,7 +9,7 @@
   --max-width: 1440px;
   --header-height: 64px;
 
-  background-color: #FAF4F0;
+  /* background-color: #FAF4F0; */
   color: var(--off-black);
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: 400;

@@ -113,10 +113,10 @@ const Component = () => {
         setSeconds((seconds) => seconds - 1);
       }, 1000);
 
-      if (seconds < 1) {
-        clearInterval(timer);
-        completed();
-      }
+      // if (seconds < 1) {
+      //   clearInterval(timer);
+      //   completed();
+      // }
     }
     return () => { clearInterval(timer); };
   });
@@ -237,7 +237,11 @@ const Component = () => {
   return (
       <>
         <div id='play-view' className={ playClassList.join(' ')}>
-          <h1 className='headline'>{ headlineMap[display] }</h1>
+          <div className='w-full flex justify-center absolute -z-10'>
+            <div className='max-w-7xl w-full py-8'>
+              <h1 className='headlinse text-8xl text-white'>{ headlineMap[display] }</h1>
+            </div>
+          </div>
           { ['countdown', 'loading', 'waiting' ].includes(display) &&
             <div className='not-active-play'>
               <div className={`pending ${display}`}>
@@ -266,7 +270,7 @@ const Component = () => {
 
           { display === 'play' &&
             <div className='play-board'>
-              <div className='game-score'>
+              <div className='game-score py-12'>
                 <div className='player-scores'>
                   {
                     [...Array(Game.players)].map((player, index) => {
@@ -294,7 +298,7 @@ const Component = () => {
                   }
                 </div>
               </div>
-              <div className='play-container'>
+              <div className='bg-gray-400/5 py-12 w-full flex flex-wrap justify-center items-center max-w-screen-2xl md:px-1'>
                 { cards.map((card, index) => {
                   if (card.display) {
                     return (

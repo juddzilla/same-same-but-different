@@ -33,7 +33,11 @@ const Component = () => {
   return (
       <>
         <div className='create-view'>
-          <h1 className='headline'>Create</h1>
+          <div className='bg-gray-950 flex justify-center py-8'>
+            <div className='w-full flex items-center max-w-7xl'>
+              <h1 className='text-8xl text-white'>Create</h1>
+            </div>
+          </div>
           <div className={`view-content game-choices ${ state.players === 1 ? 'P1' : 'P2'}`}>
             <div className='game-choice player-icons'>
               <div className='user-icon user-1'>
