@@ -1,5 +1,9 @@
 @import './styles/breakpoints.css';
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --off-black: #343231;
   --max-width: 1440px;

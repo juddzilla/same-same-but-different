@@ -27,25 +27,30 @@ export default () => {
   }, [location]);
 
   return (
-    <header className={menu ? 'show-menu' : ''}>
-      <div className='mobile-icon' onClick={() => setMenu(!menu)}>
-        {Icon('menu')}
-      </div>
-      <div className='header-container'>
-        {header.map((link, index) => (
-            <Link to={link.to} key={index}>{link.display}</Link>
-        ))}
-        <div className='account'>
-          <Link to='/account'>
-            {Icon('account')}
-          </Link>
+    <>      
+      <header className={menu ? 'show-menu' : ''}>
+        <div className='mobile-icon' onClick={() => setMenu(!menu)}>
+          {Icon('menu')}
         </div>
-        <div className='footer-links'>
-          {footerLinks.map((link, index) => (
-              <Link to={link.to} key={index}>{link.display}</Link>
-          ))}
+        <div className='header-container flex justify-center'>
+          <div className='w-full flex items-center max-w-7xl'>
+
+            {header.map((link, index) => (
+                <Link to={link.to} key={index}>{link.display}</Link>
+            ))}
+            <div className='account'>
+              <Link to='/account'>
+                {Icon('account')}
+              </Link>
+            </div>
+          </div>
+          <div className='footer-links'>
+            {footerLinks.map((link, index) => (
+                <Link to={link.to} key={index}>{link.display}</Link>
+            ))}
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 };
