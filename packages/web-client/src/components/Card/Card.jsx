@@ -35,17 +35,15 @@ export default ({ id, selected }) => {
           className={classList.join(' ')}
           id={id}
       >
-        <div className='border'>
-          <div className='shapes'>
-            {
-              [...Array(parseInt(quantity, 10))].map((n, i) => (
-                  <span key={i}>
-                    { Icon(Shape) }
-                  </span>
-              ))
-            }
-          </div>
-        </div>
+        <div className='shapes'>
+          {
+            [...Array(parseInt(quantity, 10))].map((n, i) => (
+                <span key={i}>
+                  { Icon(Shape) }
+                </span>
+            ))
+          }
+        </div>        
       </div>
   );
 };

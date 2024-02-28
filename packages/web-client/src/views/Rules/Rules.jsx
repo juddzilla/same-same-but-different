@@ -74,126 +74,159 @@ const example4 = [
     selected: false,
   },
 ];
+
+
+// Setup: The game consists of a deck of 81 unique cards. Each card has four features: color (red, green, or purple), shape (oval, squiggle, or diamond), shading (solid, striped, or open), and number (one, two, or three shapes). The deck is shuffled and dealt out into a grid on the table, typically arranged in rows and columns.
+
+// Objective: The goal of Set is to identify "sets" of three cards where each feature is either all the same or all different across the three cards. For example, three cards can form a set if they all have the same color, or if each card has a different color.
+
+// Gameplay: Players scan the grid of cards to find sets. When a player identifies a set, they call out "Set!" and remove the cards from the grid. Then, new cards are dealt to fill in the gaps. If a player makes an incorrect call, they receive a penalty, such as losing points or sitting out for a round.
+
+// Scoring: Some variations of the game involve scoring points for correctly identifying sets, with penalties for incorrect calls. The game can be played to a certain point threshold or for a set number of rounds.
+
 const Component = () => {
+
+  const snakeToTitleCase = (str) => {
+      // Split the string into an array of words using underscores as delimiter
+      let words = str.split('_');
+
+      // Capitalize the first letter of each word
+      for (let i = 0; i < words.length; i++) {
+          words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+      }
+
+      // Join the words back into a single string with spaces between them
+      return words.join(' ');
+  }
+
+  const content = {
+    "how_to_play": {
+      "objective": "The objective of SpaceBunch is to identify a grouping of three cards from a larger group of cards, where each feature—color, shape, number, and shading—is either all the same or all different across the three cards. We call this a Bunch.",
+      "rules": {
+        "deck_composition": "The deck consists of 81 unique cards. Each card has one, two, or three symbols, and each symbol can vary in shape (sun, moon, or star), color, and shading.",
+        "set_formation": "A set consists of three cards where each of the four features (color, shape, quantity, and shading) is either all the same or all different across the three cards. For example, three cards with three different colors, shapes, and shadings but the same number constitute a set.",
+        "finding_sets": "Players search the displayed cards for Bunches. When a player identifies a Bunch, they can click on each card. The game will confirm if the selected cards indeed form a Bunch, and if so, the cards will be removed from the game field.",
+        "scoring": "Players receive 10 points for each Bunch found, and for each Bunch they incorrectly guess, 5 points are removed from the player. The game can be played for a predetermined time or until the deck runs out."
+      },
+      "gameplay": {
+        "setup": "All cards are randomly presented, and if a 2 player game, both players see the cards in the same order.",
+        "identifying_sets": "Players click on three cards that they believe form a Bunch. The game will validate if the selected cards constitute a Bunch based on the rules mentioned above.",
+        "claiming_sets": "If the selected cards form a Bunch, the cards will the removed from the game field.",
+        "scoring": "+10 for correct guesses, -5 for incorrect guesses.",
+        "continuation": "Repeat the process of identifying Bunches, until time runs out."
+      },
+      "examples": [
+        {
+          cards: example1,
+          explanation: 'Each of these cards have 3 of same qualities - color, fill, and quantity, and they each of their shapes are different.',
+          icon: 'correct'
+        },
+        {
+          cards: example2,
+          explanation: "Although these cards have the same fill and shape, they don't form a {name} because the quantities are not either all the same on each card, or all different.  The same can be said about the color.",
+          icon: 'incorrect'
+        },
+        {
+          cards: example3,
+          explanation: 'The shape, fill, and color are the same on all of the cards, and the quantities are all different, so this is a valid {name}.',
+          icon: 'correct'
+        },
+        {
+          cards: example4,
+          explanation: 'This is a valid {name} because all qualities have different values.',
+          icon: 'correct'
+        },
+      ],
+      "conclusion": "SpaceBunch is an engaging game of pattern recognition and quick decision-making. With its digital interface allowing players to interact directly with the cards, it offers an intuitive and enjoyable experience for players of all skill levels. So, get ready to click your way to victory in the world of SpaceBunch!"
+    }
+  }; 
+
+  const paragraph = (text) => (<p>{text}</p>);
+
+  // const Section = (prop) => {
+  //   if (typeof content[key][prop] =)
+  //   return (<section></section>)
+  // }
+
   return (
-      <div className='how-to-play'>
-        <h1 className='headline'>How To Play</h1>
-        <div className='view-content'>
-
-          <div className='how-to-play-container'>
-              <p className='no-indent'>
-                If you've played <a className='external' href='https://en.wikipedia.org/wiki/Set_(card_game)'>Set</a>, you already know.
-              </p>
-              <p>
-                <h2>The Game</h2>
-                <h3>Cards</h3>
-                Each card has 4 qualities - quantity, color, fill, shape, and each quality has 3 different possibilities.
-              </p>
-              <p>
-                <h3>{name}</h3>
-                Group 3 cards to try to form a {name}.
-                A {name} is formed when each respective quality on all the cards are either all the same (ie all cards have the same shape) or all different (ie each card has a different shape).
-              </p>
-
-              <p className='examples'>
-                <h2>Examples</h2>
-                <div className='example'>
-                  <div className='example-cards'>
-                    { example1.map((e,i) => {
-                      return (
-                          <span key={i}>
-                          { Card(e) }
-                        </span>
-                      );
-                    })}
-                    <span className='correct-icon'>
-                      { Icon('correct') }
-                    </span>
-                  </div>
-                  <div className='example-explanation'>
-                    <span>
-                      Each of these cards have 3 of same qualities - color, fill, and quantity, and they each of their shapes are different.
-                    </span>
-                  </div>
-                </div>
-              </p>
-
-              <p>
-                <div className='example'>
-                  <div className='example-cards'>
-                    { example2.map((e,i) => {
-                      return (
-                          <span key={i}>
-                          { Card(e) }
-                        </span>
-                      );
-                    })}
-                    <span className='correct-icon'>
-                      { Icon('incorrect') }
-                    </span>
-                  </div>
-                  <div className='example-explanation'>
-                    <span>
-                      Although these cards have the same fill and shape, they don't form a {name} because the quantities are not either all the same on each card, or all different.  The same can be said about the color.
-                    </span>
-                  </div>
-                </div>
-              </p>
-
-            <p>
-              <div className='example'>
-                <div className='example-cards'>
-                  { example3.map((e,i) => {
-                    return (
-                        <span key={i}>
-                          { Card(e) }
-                        </span>
-                    );
-                  })}
-                  <span className='correct-icon'>
-                    { Icon('correct') }
-                  </span>
-                </div>
-                <div className='example-explanation'>
-                  <span>
-                    The shape, fill, and color are the same on all of the cards, and the quantities are all different, so this is a valid {name}.
-                  </span>
+    <div className='how-to-play'>
+        <div className='views-content'>
+        { Object.keys(content).map(key => {
+          return (
+            <div key={key}>
+              <div className='headline'>
+                <div className='headline-container'>
+                  <h1>{snakeToTitleCase(key)}</h1>
                 </div>
               </div>
-            </p>
+              <div className='view-content'>
+                <div className='how-to-play-container'>
 
-            <p>
-              <div className='example'>
-                <div className='example-cards'>
-                  { example4.map((e,i) => {
+                  <div className='lead-cards'>
+                    {content.how_to_play.examples[3].cards.map(card => (
+                      <span key={card.id}>
+                        { Card(card) }
+                      </span>
+                    ))}
+                  </div>
+                  { Object.keys(content[key]).map(k => {
+
                     return (
-                        <span key={i}>
-                          { Card(e) }
-                        </span>
-                    );
-                  })}
-                  <span className='correct-icon'>
-                    { Icon('correct') }
-                  </span>
-                </div>
-                <div className='example-explanation'>
-                  <span>
-                    This is a valid {name} because all qualities have different values.
-                  </span>
+                      <section key={k}>
+                        <h2>{snakeToTitleCase(k)}</h2>
+                        { typeof content[key][k] === 'string' ? (
+                          <>{paragraph(content[key][k])}</>
+                        ) : (
+                          <>
+                            {
+                              Array.isArray(content[key][k]) ? (
+                                <>
+                                  { content[key][k].map((example, index) => (
+                                    <div className='example' key={`example-${index}`}>
+                                        <div className='example-cards'>
+                                          { example.cards.map((e,i) => {
+                                            return (
+                                              <span key={i}>
+                                                { Card(e) }
+                                              </span>
+                                            );
+                                          })}
+                                          <span className='correct-icon'>
+                                            { Icon(example.icon) }
+                                          </span>
+                                        </div>
+                                        <div className='example-explanation'>
+                                          <p>
+                                            {example.explanation}
+                                          </p>
+                                        </div>
+                                      </div>
+                                  ))}
+                                
+                                </>
+                              ) : (
+                                <>
+                                  { Object.keys(content[key][k]).map(l => (
+                                    <div key={l}>
+                                      <h3>{snakeToTitleCase(l)}</h3>
+                                      {paragraph(content[key][k][l])}
+                                    </div>
+                                  ))}
+                                </>                         
+                              )
+                                
+                            } 
+                          </>
+                        )
+                          
+                        }                        
+                      </section>
+                    )})}
                 </div>
               </div>
-            </p>
-
-            <p className='gameplay'>
-              <h2>Gameplay</h2>
-              <h3>Scoring</h3>
-              For each correct guess you gain 10 points, but for each incorrect guess, you lose 5 points.
-              <h3>Duration</h3>
-              During creation of the game, select the max duration (in seconds).  The game will end once either the max duration has been met, or all players have left the game.
-              <h3>2 Players</h3>
-              Share the link to a 2 player game, and play in realtime.
-            </p>
-          </div>
+            </div>
+          )
+        })}
         </div>
       </div>
   );

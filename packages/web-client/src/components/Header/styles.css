@@ -7,6 +7,7 @@ header {
     display: flex;
     font-size: 18px;
     height: var(--header-height);
+    justify-content: center;
     position: relative;
 
     width: 100vw;
@@ -43,6 +44,7 @@ header {
         background-color: var(--off-black);
         display: flex;
         height: 100vh;
+        max-width: var(--max-width);
         padding: 0 84px;
         position: absolute;
         flex-direction: column;
@@ -55,7 +57,7 @@ header {
             flex-direction: row;
             transform: unset;
             height: var(--header-height);
-            padding: 0 32px;
+            padding: 0;
             top: 0;
             left: 0;
             position: relative;
