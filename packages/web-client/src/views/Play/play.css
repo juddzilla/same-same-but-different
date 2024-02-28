@@ -115,7 +115,7 @@ body.wrong .play-card .border {
     }
 
     .game-score {
-        margin-top: 48px;
+        margin: 48px 0 0;
 
         @mixin breakpoint-down medium {
             bottom: 0;
@@ -215,8 +215,12 @@ body.wrong .play-card .border {
     display: flex;
     flex: 1;
     justify-content: center;
-    padding-top: 25vh;
+    
     width: 100%;
+
+    @mixin breakpoint-up medium {
+        padding-top: 10vh;
+    }
 }
 
 .pending {
@@ -225,9 +229,15 @@ body.wrong .play-card .border {
 
     .pending-container {
         align-items: center;
+        background-color: var(--secondary-bg);
         display: flex;
         justify-content: center;
-        position: fixed;
+        
+        padding:64px;
+
+        @mixin breakpoint-up medium {
+            position: fixed;
+        }
     }
 
     .circle {
@@ -242,11 +252,20 @@ body.wrong .play-card .border {
     }
 
     &.waiting {
-         transform: translateY(48px);
-         width: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column-reverse;
+    
+        
+        @mixin breakpoint-up medium {
+             transform: translateY(48px);
+             flex-direction: row;
+
+         }
 
         h1 {
             color: white;
+            text-shadow: 2px 2px 38px rgb(0 0 0 / 0.4);
         }
         .circle {
             animation: breathing 5s ease-out infinite normal;
@@ -255,26 +274,46 @@ body.wrong .play-card .border {
 
         }
 
-        .copyUrl {
-            align-items: center;
-            animation-delay: 500ms;
-            animation-duration: 2s;
-            animation-fill-mode: forwards;
-            animation-name: share-mobile;
-            background-color: white;
-            border-radius: 50%;
-            color: var(--off-black);
-            cursor: pointer;
+        .copy-border {
             display: flex;
-            flex-direction: column;
-            font-weight: bold;
-            height: 160px;
+            align-items: center;
             justify-content: center;
-            position: absolute;
-            width: 160px;
-            z-index: -2;
+            border: 2px solid black;
+            padding: 8px 16px;
+            border-radius: 8px;
 
             @mixin breakpoint-up medium {
+                border: none;
+                flex-direction: column;
+                padding: 0;
+            }
+        }
+
+        .copyUrl {
+            align-items: center;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            padding: 32px;
+
+            @mixin breakpoint-up medium {
+                
+                animation-delay: 500ms;
+                animation-duration: 2s;
+                animation-fill-mode: forwards;
+                animation-name: share-mobile;
+                background-color: white;
+                border-radius: 50%;
+                color: var(--off-black);
+                cursor: pointer;
+                
+                flex-direction: column;
+                font-weight: bold;
+                height: 160px;
+                padding: 0;
+                position: absolute;
+                width: 160px;
+                z-index: -2;
                 animation-name: share;
             }
 

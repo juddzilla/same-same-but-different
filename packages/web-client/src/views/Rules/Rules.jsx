@@ -76,14 +76,6 @@ const example4 = [
 ];
 
 
-// Setup: The game consists of a deck of 81 unique cards. Each card has four features: color (red, green, or purple), shape (oval, squiggle, or diamond), shading (solid, striped, or open), and number (one, two, or three shapes). The deck is shuffled and dealt out into a grid on the table, typically arranged in rows and columns.
-
-// Objective: The goal of Set is to identify "sets" of three cards where each feature is either all the same or all different across the three cards. For example, three cards can form a set if they all have the same color, or if each card has a different color.
-
-// Gameplay: Players scan the grid of cards to find sets. When a player identifies a set, they call out "Set!" and remove the cards from the grid. Then, new cards are dealt to fill in the gaps. If a player makes an incorrect call, they receive a penalty, such as losing points or sitting out for a round.
-
-// Scoring: Some variations of the game involve scoring points for correctly identifying sets, with penalties for incorrect calls. The game can be played to a certain point threshold or for a set number of rounds.
-
 const Component = () => {
 
   const snakeToTitleCase = (str) => {
@@ -137,7 +129,7 @@ const Component = () => {
           icon: 'correct'
         },
       ],
-      "conclusion": "SpaceBunch is an engaging game of pattern recognition and quick decision-making. With its digital interface allowing players to interact directly with the cards, it offers an intuitive and enjoyable experience for players of all skill levels. So, get ready to click your way to victory in the world of SpaceBunch!"
+      "lets_do_it!": "SpaceBunch is an engaging game of pattern recognition and quick decision-making. With its digital interface allowing players to interact directly with the cards, it offers an intuitive and enjoyable experience for players of all skill levels. So, get ready to click your way to victory in the world of SpaceBunch!"
     }
   }; 
 

@@ -237,7 +237,11 @@ const Component = () => {
   return (
       <>
         <div id='play-view' className={ playClassList.join(' ')}>
-          <h1 className='headline'>{ headlineMap[display] }</h1>
+          <div className='headline'>
+            <div className='headline-container'>
+              <h1>{ headlineMap[display] }</h1>
+            </div>
+          </div>
           { ['countdown', 'loading', 'waiting' ].includes(display) &&
             <div className='not-active-play'>
               <div className={`pending ${display}`}>
@@ -247,10 +251,11 @@ const Component = () => {
                 </div>
                 { display === 'waiting' &&
                     <div className='copyUrl' onClick={copyUrl}>
-
-                      <span>Click, Copy,</span>
-                      { Icon('link') }
-                      <span>Share</span>
+                        <div className='copy-border'>
+                          <span>Click, Copy,</span>
+                          { Icon('link') }
+                          <span>Share</span>
+                        </div>
                     </div>
                 }
               </div>
@@ -276,8 +281,8 @@ const Component = () => {
                       const points = Game.score[indexPossessiveMap[index]] + CalcScore(attempts[index]);
                       const total = CountAttempts(attempts[index]);
                       return (
-                          <>
-                            <div className={scoreClassList.join(' ')} key={index}>
+                          <div style={{display: 'flex'}} key={index}>
+                            <div className={scoreClassList.join(' ')}>
                               <div className='player-name'>
                                 { label }
                               </div>
@@ -288,7 +293,7 @@ const Component = () => {
                                   { seconds }
                                 </div>
                             }
-                          </>
+                          </div>
                       );
                     })
                   }

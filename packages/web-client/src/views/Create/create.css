@@ -135,6 +135,7 @@
         svg {
             transform: scale(0.8);
             transition: transform 90ms ease-in-out;
+            path { stroke: #FFF; }
         }
 
         .selected svg {
@@ -157,6 +158,7 @@
 
             svg path {
                 transition: stroke 180ms ease-in-out;
+                stroke: #FFF
             }
 
             &:hover {

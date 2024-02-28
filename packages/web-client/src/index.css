@@ -4,6 +4,7 @@
   --off-black: #0c0a09;
   --max-width: 1024px;
   --header-height: 64px;
+  --secondary-bg: #f3f4f6;
 
   background-color: #fafaf9;
   color: var(--off-black);

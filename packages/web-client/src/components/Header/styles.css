@@ -94,6 +94,10 @@ header {
             }
         }
     }
+
+    .mobile-icon {
+        width: 100%;
+    }
     .footer-links, .mobile-icon {
         @mixin breakpoint-up large {
             display: none;
