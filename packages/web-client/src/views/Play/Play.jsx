@@ -239,7 +239,42 @@ const Component = () => {
         <div id='play-view' className={ playClassList.join(' ')}>
           <div className='headline'>
             <div className='headline-container'>
-              <h1>{ headlineMap[display] }</h1>
+              <div>
+                <h1>{ headlineMap[display] }</h1>
+                { display === 'play' &&
+                  <h3>Seconds Remaining: { seconds }</h3>
+                }
+              </div>
+              <div>
+              { display === 'play' &&
+                <div className='game-score'>
+                  <div className='player-scores'>
+                      <div className='time'>
+                        { seconds }
+                      </div>
+                    {
+                        [...Array(Game.players)].map((player, index) => {
+                        const label = players[index];
+                        const scoreClassList = ['player-score', `score-${index}`]
+                        const correct = CountAttempts(attempts[index], true);
+                        const points = Game.score[indexPossessiveMap[index]] + CalcScore(attempts[index]);
+                        const total = CountAttempts(attempts[index]);
+                        return (
+                            <div className='score-container' key={index}>
+                              <div className={scoreClassList.join(' ')}>
+                                <div className='player-name'>
+                                  { label }
+                                </div>
+                                { Pie({ attempts: [correct, total], index, points }) }
+                              </div>                              
+                            </div>
+                        );
+                      })
+                    }
+                  </div>
+                </div>
+              }
+              </div>
             </div>
           </div>
           { ['countdown', 'loading', 'waiting' ].includes(display) &&
@@ -270,35 +305,7 @@ const Component = () => {
           }
 
           { display === 'play' &&
-            <div className='play-board'>
-              <div className='game-score'>
-                <div className='player-scores'>
-                  {
-                    [...Array(Game.players)].map((player, index) => {
-                      const label = players[index];
-                      const scoreClassList = ['player-score', `score-${index}`]
-                      const correct = CountAttempts(attempts[index], true);
-                      const points = Game.score[indexPossessiveMap[index]] + CalcScore(attempts[index]);
-                      const total = CountAttempts(attempts[index]);
-                      return (
-                          <div style={{display: 'flex'}} key={index}>
-                            <div className={scoreClassList.join(' ')}>
-                              <div className='player-name'>
-                                { label }
-                              </div>
-                              { Pie({ attempts: [correct, total], index, points }) }
-                            </div>
-                            { index === 0 &&
-                                <div className='time'>
-                                  { seconds }
-                                </div>
-                            }
-                          </div>
-                      );
-                    })
-                  }
-                </div>
-              </div>
+            <div className='play-board'>             
               <div className='play-container'>
                 { cards.map((card, index) => {
                   if (card.display) {

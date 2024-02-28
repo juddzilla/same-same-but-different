@@ -108,15 +108,23 @@ body.wrong .play-card .border {
         }
     }
 
+    .headline-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
     .completed-text {
         font-size: 48px;
         padding-top: 100px;
         padding-left: 24px;
     }
 
-    .game-score {
-        margin: 48px 0 0;
+    .score-container {
+        display: flex;
+        width: 100%;
+    }
 
+    .game-score {
         @mixin breakpoint-down medium {
             bottom: 0;
             display: block;
@@ -167,11 +175,11 @@ body.wrong .play-card .border {
 
             flex-direction: row;
 
-            .pie {
-                @mixin breakpoint-down medium {
-                    position: absolute;
-                }
-            }
+            
+        }
+
+        .pie {
+            top: 15px;
         }
 
         .attempt-ratio {
@@ -189,19 +197,30 @@ body.wrong .play-card .border {
                 display: unset;
             }
         }
+
+        .player-score {
+            justify-content: center;
+            width: 100%;;
+        }
     }
 
     .time {
+        position: absolute;
         font-size: 36px;
         display: flex;
         align-items: center;
-        width: 100px;
-        margin: 0 16px;
+        width: 100vw;
+        /* margin: 0 16px; */
         text-align: center;
         justify-content: center;
 
         @mixin breakpoint-down medium {
             width: 100%;
+            
+        }
+
+        @mixin breakpoint-up medium {
+            display: none;
         }
     }
 }
