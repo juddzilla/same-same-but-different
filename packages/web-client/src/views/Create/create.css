@@ -58,7 +58,7 @@
     z-index: 2;
 
     @mixin breakpoint-up medium {
-        min-height: 240px;
+        /* min-height: 240px; */
         justify-content: flex-start;
         top: 48px;
     }
@@ -68,28 +68,50 @@
         bottom: -54px;
         cursor: pointer;
         display: flex;
-        justify-content: flex-end;
-        left: 16px;
+        /* justify-content: flex-end; */
+        /* left: 16px; */
         position: absolute;
         width: 100%;
 
         .play {
             align-items: center;
             display: flex;
-            width: 100%;
+            width: calc(100% - 32px);
+            background: var(--off-black);
+            border-radius: 4px;
+            color: white;
+            justify-content: center;
+            border: 2px solid var(--off-black);
+
+            &.submitting, &.complete {
+                background-color: white;
+                color: var(--off-black);
+            }
+
+            &.submitting {
+                span {
+                    transition: transform 180ms linear;
+                    transform: translateX(-200%);
+                }
+            }
+
+            &.complete {                
+                span {
+                    transition: transform 200ms linear;
+                    transform: translateX(500%);
+                }
+            }
 
             span {
                 align-items: center;
-                background: var(--off-black);
-                border-radius: 8px;
-                color: white;
+                padding-bottom: 18px;
                 display: flex;
-                font-size: 18px;
+                font-size: 36px;
                 font-weight: bold;
                 height: 44px;
                 justify-content: center;
-                line-height: 22px;
-                width: calc(100% - 32px);
+                /* line-height: 22px; */
+                
             }
 
             svg path {
@@ -177,7 +199,7 @@
     }
 
     .option-key, .option-value {
-        font-size: 40px;
+        font-size: 36px;
         font-weight: bold;
         line-height: 48px;
     }
@@ -188,7 +210,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding-top: 64px;
+    /* padding-top: 64px; */
     overflow-x: hidden;
 
     @mixin breakpoint-up medium {
@@ -198,13 +220,16 @@
     }
 
     &.P2 {
+
      .user-1 {
          transform: translateX(-52px);
      }
-        .user-2 {
-            z-index: 1;
-            transform: translateX(64px) scale(0.75) translateY(-108px);
-        }
+
+    .user-2 {
+        opacity: 1;
+        z-index: 1;
+        transform: translateX(64px) scale(0.75) translateY(-108px);
+    }
     }
 }
 
@@ -220,8 +245,10 @@
     }
 
     .user-2 {
+        opacity: 0;
         transform: translateX(100vw) scale(0.75) translateY(-80px);
         z-index: -1;
+        transition: opacity 180ms linear;
 
         @mixin breakpoint-up medium {
             transform: translateX(-300px) scale(0.75) translateY(-80px);

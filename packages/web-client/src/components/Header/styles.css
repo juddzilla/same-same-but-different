@@ -93,6 +93,15 @@ header {
                 margin-right: 32px;
             }
         }
+
+        .logo {
+            width: 24px;
+            height: 24px;
+            
+            @mixin breakpoint-up large {
+                margin-right: 24px;
+            }
+        }
     }
 
     .mobile-icon {

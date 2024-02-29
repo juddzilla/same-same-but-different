@@ -6,29 +6,60 @@ import Icon from '../../components/Icons';
 
 import './create.css';
 
-const Create = async (opts) => {
-  const game = await API.GamesCreate(opts);
-  return game;
-};
-
-const discoverableMessage = {
-  true: 'Anyone can join',
-  false: 'Only players with link can join'
-};
-
-const choicesDefault = { discoverable: true, duration: 60, players: 1 };
 const Component = () => {
+  const choicesDefault = { discoverable: true, duration: 60, players: 1 };
   const [ state, setState ] = useState(choicesDefault);
+  const [ progress, setProgress ] = useState(null);
   const navigate = useNavigate();
 
-  const onDurationChange = (e) => setState({...state, duration: e.target.value });
-  const setPlayers = (players) => setState({...state, players });
-  const setDiscoverable = (bool) => setState({...state, discoverable: bool });
+  const progresses = ['submitting', 'complete'];
+
+  const Create = async (opts) => {
+    setProgress(progresses[0]);
+    const game = await API.GamesCreate(opts);
+    return game;
+  };
+  
+  const discoverableMessage = {
+    true: 'Anyone can join',
+    false: 'Only players with link can join'
+  };
+  
+  const onDurationChange = (e) => {
+    if (progress !== null) {
+      return;
+    }
+    setState({...state, duration: e.target.value })
+  };
+
+  const setPlayers = (players) => {
+    if (progress !== null) {
+      return;
+    }
+    setState({...state, players })
+  };
+
+  const setDiscoverable = (bool) => {
+    if (progress !== null) {
+      return;
+    }
+    setState({...state, discoverable: bool });
+  }
 
   const create = async () => {
     const req = await Create(state);
-    navigate(`/game/${req.results.publicHash}`);
+    setProgress(progresses[1]);
+    setTimeout(() => {
+
+      navigate(`/game/${req.results.publicHash}`);
+    }, 1000);
   };
+
+  let arrowClassList = 'play';
+
+  if (progress !== null) {
+    arrowClassList += ` ${progress}`;
+  }
 
   return (
       <>
@@ -95,8 +126,8 @@ const Component = () => {
               }
 
               <div className='actions'>
-                <div className="play" onClick={create}>
-                  <span>PLAY</span>
+                <div className={arrowClassList} onClick={create}>
+                  <span>{'\u27F6'}</span>
                 </div>
               </div>
             </div>

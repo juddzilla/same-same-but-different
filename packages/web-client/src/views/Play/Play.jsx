@@ -298,9 +298,9 @@ const Component = () => {
           }
           { display === 'completed' &&
               <div className='completed-text'>
-                <h3>Doing</h3>
-                <h3>Final</h3>
-                <h3>Calculations</h3>
+                <div>Doing</div>
+                <div>Final</div>
+                <div>Calculations</div>
               </div>
           }
 

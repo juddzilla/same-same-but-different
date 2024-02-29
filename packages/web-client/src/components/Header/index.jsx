@@ -32,6 +32,7 @@ export default () => {
         {Icon('menu')}
       </div>
       <div className='header-container'>
+        <img src='https://s3.amazonaws.com/spacebunch.app/favicon.png' className='logo' />
         {header.map((link, index) => (
             <Link to={link.to} key={index}>{link.display}</Link>
         ))}

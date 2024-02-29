@@ -114,9 +114,9 @@ body.wrong .play-card .border {
     }
 
     .completed-text {
-        font-size: 48px;
+        font-size: 96px;
         padding-top: 100px;
-        padding-left: 24px;
+        text-align: center;
     }
 
     .score-container {
@@ -178,8 +178,10 @@ body.wrong .play-card .border {
             
         }
 
-        .pie {
-            top: 15px;
+        .pie {            
+            @mixin breakpoint-up large {
+                top: 15px;                
+            }
         }
 
         .attempt-ratio {
@@ -219,7 +221,7 @@ body.wrong .play-card .border {
             
         }
 
-        @mixin breakpoint-up medium {
+        @mixin breakpoint-up large {
             display: none;
         }
     }
@@ -256,6 +258,11 @@ body.wrong .play-card .border {
 
         @mixin breakpoint-up medium {
             position: fixed;
+            
+        }
+
+        h1 {
+            z-index: 1;
         }
     }
 
@@ -267,7 +274,7 @@ body.wrong .play-card .border {
         position: absolute;
         transition: background-color 90ms linear, transform 90ms linear;
         width: 160px;
-        z-index: -1;
+        z-index: 0;
     }
 
     &.waiting {
